@@ -1,0 +1,209 @@
+---
+name: lcs-task-slicer
+description: 'Use this skill whenever the user asks to split a reviewed PRD into executable tasks. Trigger on "slice prd", "break down prd", "create tasks", or similar. Produce small, dependency-aware tracer-bullet vertical slices. Classify tasks into AFK (autonomous) or HITL (requires human input). Present the proposed breakdown to the user for feedback before writing tasks. Write each task into its own file task-###.md under .lcs/work-items/{timestamp}-{slug-work-item}/task/.'
+adapters: [claudecode, opencode]
+compatibility: [claudecode, opencode]
+---
+
+# LCS Task Slicer Skill
+
+Shared Coding Contract
+- Refer to Shared Coding Workflow Contract in `../lcs-shared/contract.md` for folder conventions, Handoff format, and token optimization.
+
+Purpose
+- Convert `srs.md` when present, otherwise `prd-enhanced.md` (or `prd.md`), into individual executable task files (`task-001.md`, `task-002.md`, etc.) under `.lcs/work-items/{timestamp}-{slug-work-item}/task/`.
+- Ensure tasks are small, dependency-aware, and session-friendly (<2 hours human time or one agent session).
+
+Trigger
+- Activate when user requests to "slice prd", "break down prd", "slice prd-enhanced.md", "create tasks", or similar.
+
+
+### Trigger
+
+Activate when user requests related to this skill's purpose. See description field in YAML frontmatter for trigger phrases.
+
+Behavior Checklist
+
+## OKF Frontmatter & Writing Safety
+
+- When creating `task-coverage.md` and `task-###.md` files, include YAML frontmatter following the schema in `../lcs-shared/contract.md` with `artifact_type: task` or `artifact_type: task_coverage`.
+- Follow the Artifact Writing Safety rules in contract.md.
+- **One-file-per-task write strategy**: Write task-coverage.md first (one file), then write each task-###.md one at a time. Do not write more than one task file per response.
+- Generate all task content during planning, then write one file per response.
+
+1. **Gather Context**:
+    - Read `.lcs/state.md` to identify the active work-item directory: `.lcs/work-items/{timestamp}-{slug-work-item}/`.
+    - Read source bundle:
+      - `prd-enhanced.md` (fallback to `prd.md` if enhanced version is missing)
+      - `srs.md` if present
+      - `tests.md` if present
+      - `api.md` if present
+      - `db.md` if present
+      - `traceability.md` if present
+    - If `prd-enhanced.md` exists but was not read, stop and report a source conflict.
+    - If `srs.md` exists, use SRS IDs (`FR-###`, `BR-###`, `VR-###`, `EC-###`, `AC-###`) as the primary task slicing source instead of PRD prose.
+    - If `traceability.md` exists and contains an `## Unresolved Sources` section with any unresolved `SRC-###`, DO NOT proceed with slicing. Report the unresolved sources as a slicing blocker and stop. Every `SRC-###` must be decomposed or explicitly resolved before tasks are written.
+    - Verify PRD has clear acceptance criteria and test strategy. If missing or weak, suggest running `lcs-prd-reviewer` first.
+
+2. **Draft Tracer-Bullet Vertical Slices**:
+   - Break the plan into **tracer bullet** tasks. Each task must be a thin vertical slice cutting through all integration layers end-to-end (schema, API, UI, tests), NOT a horizontal slice of one layer.
+   - Slices should deliver a narrow but COMPLETE path that is demoable/verifiable.
+   - Classify tasks into:
+     - `AFK` (Away From Keyboard): Can be fully implemented and merged by autonomous agents.
+     - `HITL` (Human In The Loop): Requires human interaction, architectural decisions, or design reviews. Prefer AFK over HITL.
+
+3. **Quiz/Confirm with the User**:
+   - Present the proposed breakdown to the user as a numbered list:
+     - **Title**: Short descriptive name
+     - **Type**: AFK / HITL
+     - **Blocked by**: Which other tasks must complete first
+     - **User stories covered**: Associated stories (if any)
+   - Ask the user:
+     - Does the granularity feel right (too coarse / too fine)?
+     - Are the dependency relationships correct?
+     - Should any slices be merged or split further?
+     - Are the correct slices marked as HITL and AFK?
+   - Iterate and refine based on feedback until the user approves.
+
+4. **Create Task Files**:
+    - Create the output directory: `.lcs/work-items/{timestamp}-{slug-work-item}/task/` if it does not exist.
+    - Write each approved task into `.lcs/work-items/{timestamp}-{slug-work-item}/task/task-###.md` (sequential 3-digit number starting at `001`).
+    - Every task must include Source coverage: Source IDs, Requirement IDs, Acceptance Criteria IDs, and Test IDs. If a task cannot map to upstream IDs, do not write it as executable; mark it as a slicing gap.
+    - After writing all task files, verify the Task Coverage Matrix covers every `SRC-###` from the Source Requirement Ledger / traceability. Any uncovered `SRC-###` must appear under `## Gaps` and be reported as a blocking risk in the Handoff.
+
+5. **Generate Task Coverage Matrix**:
+    - Create or update `.lcs/work-items/{timestamp}-{slug-work-item}/task-coverage.md`.
+    - Map every `SRC-###`, `FR-###`, `BR-###`, `VR-###`, `EC-###`, `AC-###`, and `TEST-###` to at least one task where applicable.
+    - Flag uncovered IDs under `## Gaps`.
+
+6. **Update State & Handoff**:
+    - Update `.lcs/state.md` with:
+      - `current_phase: tasks`
+      - `work_items[state.current_work].phase = tasks`
+      - `work_items[state.current_work].updated_at = <current-ISO-timestamp>`
+      - `timestamp: <current-ISO-timestamp>`
+    - Output the structured task list summary.
+    - End with a Handoff pointing to the next logical step (e.g. `lcs-task-executor` and `task-001.md`).
+
+Prompt Templates
+- Starter: "Slice prd-enhanced.md menjadi task-###.md"
+- Slicing rule: "Prefer thin tracer-bullet vertical slices that take <2 hours or one agent session. Clearly partition AFK vs HITL slices."
+
+Task File Structure
+Each `task-###.md` must adhere to this exact structure:
+
+```markdown
+---
+title: "Task {###}: {task-name}"
+format_version: "okf/0.2"
+authors:
+  - type: agent
+    name: "lcs-task-slicer"
+created: {YYYY-MM-DD}
+updated: {YYYY-MM-DD}
+artifact_type: task
+cot_level: very_strict
+version: "1.0"
+status: pending
+tags: [task, implementation]
+summary: "{Brief description of what this task implements}"
+source: "srs.md"
+related: ["task-coverage.md"]
+blocked_by: <TASK-### or None>
+---
+
+# TASK-###: <task-name>
+
+* **Status**: pending
+* **Type**: <AFK / HITL>
+* **Depends on**: <TASK-### or None>
+* **Source coverage**:
+  - Sources: SRC-001, SRC-002
+  - Requirements: FR-001, BR-001
+  - Acceptance Criteria: AC-001, AC-002
+  - Tests: TEST-001, TEST-002
+* **Priority**: <high/medium/low>
+* **Scope**: <vertical slice behavior, avoiding extremely stale specific details unless from verified prototypes>
+* **Files likely touched**:
+  - <file-path-1>
+  - <file-path-2>
+* **Implementation notes**:
+  - <step-by-step logic, API changes, or structures>
+* **Acceptance criteria**:
+  - [ ] <AC 1 (falsifiable)>
+  - [ ] <AC 2 (falsifiable)>
+* **Test plan**:
+  - <Unit test spec or manual verification steps>
+
+## Chain of Truth Report
+### Level
+Strict
+
+### Sources Checked
+- `.lcs/state.md`
+- `.lcs/work-items/{timestamp}-{slug-work-item}/prd-enhanced.md`
+
+### Assumptions
+- <label each [verified] or [unverified]>
+
+### Plan
+<Enumerated steps>
+
+### Actions Taken
+<Per-step record>
+
+### Verification
+<Automated checks attempted; document every failure>
+
+### Report
+<Explicit pass/fail per acceptance criterion>
+
+## Blocking Edges & Expand-Contract Pattern
+
+- **Blocking Edges:** Every task file MUST include `blocked_by` in YAML frontmatter. Work the frontier (unblocked tasks first).
+
+- **Wide Refactors (Expand-Contract):** If a task is a mechanical change with massive blast radius (e.g., rename column):
+
+  1. *Expand:* Add new form beside old (Task 1).
+
+  2. *Migrate:* Move call sites in batches (Tasks 2..N).
+
+  3. *Contract:* Delete old form (Task N+1).
+
+  Do NOT force wide refactors into vertical tracer bullets.
+
+## Handoff
+Next recommended skill: lcs-task-executor
+Next file to read: .lcs/work-items/{timestamp}-{slug-work-item}/task/task-###.md
+Current phase: tasks
+Current confidence: high
+Blocking questions: None
+Risks to carry forward: <risks>
+Source of Truth Bundle: .lcs/state.md, prd-enhanced.md if present, prd.md, srs.md if present, tests.md if present, api.md if present, db.md if present, traceability.md if present, task-coverage.md
+Must Preserve IDs: SRC-001, FR-001, AC-001, TEST-001, ...
+Unresolved IDs: <list or None>
+Suggested next command: Eksekusi task-###.md
+```
+
+Task Coverage Matrix template:
+
+```markdown
+# Task Coverage Matrix
+
+| ID | Type | Covered By | Status |
+|---|---|---|---|
+| SRC-001 | source | TASK-001 | covered |
+| FR-001 | requirement | TASK-001 | covered |
+| AC-001 | acceptance | TASK-001 | covered |
+| TEST-001 | test | TASK-001 | covered |
+
+## Gaps
+
+- <ID>: <reason>
+```
+
+## Chain of Truth Level
+
+Level: Strict
+
+This skill follows the LCS Chain of Truth protocol at the declared level.

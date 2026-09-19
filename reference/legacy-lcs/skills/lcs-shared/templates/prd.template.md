@@ -1,0 +1,67 @@
+---
+title: "PRD: {feature-name}"
+format_version: "okf/0.2"
+authors:
+  - type: agent
+    name: "lcs-toprd"
+created: {YYYY-MM-DD}
+updated: {YYYY-MM-DD}
+artifact_type: prd
+cot_level: standard
+version: "1.0"
+status: draft
+tags: [prd, requirements]
+summary: "Product Requirements Document for {feature-name}"
+source: "{explore.md or debug.md path}"
+related: []
+---
+
+# PRD: {feature-name}
+
+## Problem Statement
+{What problem does this solve? For whom?}
+
+## Goals & Non-Goals
+### Goals
+- {Goal 1}
+
+### Non-Goals
+- {Explicit non-goal 1}
+
+## Affected Areas / Files
+| File/Area | Change Type | Notes |
+|-----------|-------------|-------|
+| {path} | create/modify/delete | {why} |
+
+## Requirements
+### SRC-001: {requirement-name}
+- Description: ...
+- Priority: P0/P1/P2
+
+## Acceptance Criteria
+- [ ] {Criterion 1}
+
+## Test Strategy
+- {How will this be tested?}
+
+## Security Considerations
+- {Any security implications?}
+
+## Performance Considerations
+- {Any performance implications?}
+
+## Open Questions
+- {Question 1}
+
+## Handoff
+
+Next recommended skill: lcs-prd-reviewer
+Next file to read: .lcs/work-items/{timestamp}-{slug-work-item}/prd.md
+Current phase: prd
+Current confidence: <low/medium/high>
+Blocking questions: <list or None>
+Risks to carry forward: <summary or None>
+Source of Truth Bundle: .lcs/state.md, explore.md if present, debug.md if present, research/ if present, prototype.md if present, wayfinder-map.md if present, prd.md
+Must Preserve IDs: SRC-001, SRC-002, ...
+Unresolved IDs: <list or None>
+Suggested next command: Review and harden prd.md

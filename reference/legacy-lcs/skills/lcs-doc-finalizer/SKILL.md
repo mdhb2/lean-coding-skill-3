@@ -1,0 +1,224 @@
+---
+name: lcs-doc-finalizer
+description: 'Use this skill whenever the user asks to finalize completed work into canonical documentation. Trigger on "finalize documentation", "prepare final-doc", "lcs-doc-finalizer", "selesaikan dokumentasi". Ensure all tasks are marked done, generate map.md and doc.md under .lcs/docs/{timestamp}-{slug-work-item}/, recommend git commit and PR description, move source artifacts under .lcs/work-items/{timestamp}-{slug-work-item}/ to .lcs/archive/{timestamp}-{slug-work-item}/ and delete source folder.'
+adapters: [claudecode, opencode]
+compatibility: [claudecode, opencode]
+---
+
+# LCS Doc Finalizer Skill
+
+Shared Coding Contract
+- Refer to Shared Coding Workflow Contract in `../lcs-shared/contract.md` for folder conventions, Handoff format, and token optimization.
+
+Purpose
+- Consolidate completed work into high-quality documentation.
+- Save documentation under `.lcs/docs/{timestamp}-{slug-work-item}/` as two separate files:
+  1. `map.md` (adapted from `aido-map` context map structure)
+  2. `doc.md` (adapted from `aix-doc-finalizer` final-doc structure)
+
+Trigger
+- Activate when the user requests to "finalize documentation", "prepare final-doc", "lcs-doc-finalizer", "selesaikan dokumentasi", or similar.
+
+## OKF Frontmatter & Writing Safety
+
+- When creating `doc.md` and `map.md`, include YAML frontmatter following the schema in `../lcs-shared/contract.md` with `artifact_type: final_doc` (the canonical finalization artifact is the `doc.md` + `map.md` pair under `.lcs/docs/{timestamp}-{slug-work-item}/`).
+- Follow the Artifact Writing Safety rules in contract.md — generate content first, write one file, verify, stop on failure.
+
+
+### Trigger
+
+Activate when user requests related to this skill's purpose. See description field in YAML frontmatter for trigger phrases.
+
+Behavior checklist
+1. Read `.lcs/state.md` to identify the active work-item: resolve `current_work` to the directory `.lcs/work-items/{current_work}/`. If `current_work` is null, alert the user and ask them to select a work item first.
+2. Scan the task folder `.lcs/work-items/{timestamp}-{slug-work-item}/task/` and read all task files (`task-###.md`).
+3. Verify all task files are marked `Status: done`.
+    - If any task is NOT done (e.g., `pending` or `blocked`), alert the user, list the incomplete tasks, and ask if they wish to proceed anyway or continue executing tasks first.
+4. Detect artifact type of the active work item:
+    - If `prd-enhanced.md` or `prd.md` exists in the work-item folder, this is a PRD-driven work item. Read `prd-enhanced.md` (fallback `prd.md`) and `explore.md` for Objective/Context.
+    - If no PRD exists (e.g., work item originated from `lcs-codebase-doc` under `.lcs/codebase/`), this is a non-PRD documentation work item. Read `.lcs/codebase/CHAIN-OF-TRUTH.md` and the relevant `.lcs/codebase/*.md` files instead. For `doc.md`, derive Objective/Context from the codebase documentation itself rather than a PRD; leave PRD-specific fields empty or mark `N/A (codebase documentation)`.
+5. Create the following directories if they do not exist:
+   - `.lcs/docs/{timestamp}-{slug-work-item}/` - output target for documentation files.
+   - `.lcs/archive/{timestamp}-{slug-work-item}/` - archive target for source artifacts.
+6. Generate `.lcs/docs/{timestamp}-{slug-work-item}/map.md` mapping the exact files changed or created during this work-item.
+7. Generate `.lcs/docs/{timestamp}-{slug-work-item}/doc.md` consolidating the functional changes, verification steps, git commit recommendations, and PR description.
+   - Read all task files from `.lcs/work-items/{timestamp}-{slug-work-item}/task/` folder.
+   - Extract task titles and descriptions from each `task-###.md` file.
+   - Generate `## Task List` section in doc.md with bullet points listing all completed tasks in clear, professional English (see template for format and example).
+8. Update `.lcs/state.md` with:
+   - Set selected phase to `finalization` using the common synchronization rule:
+     - `current_phase: finalization`
+     - `work_items[current_work].phase: finalization`
+     - `work_items[current_work].updated_at: <current-ISO-timestamp>`
+   - `timestamp: <current-ISO-timestamp>`
+   - `last_session_note: Finalized documentation for {slug-work-item}`
+9. Generate or update `.lcs/docs/docs-index.md` (ensure the filename is exactly `docs-index.md`, not `reff-index.md` or any other variant) by scanning all subdirectory items under `.lcs/docs/` and listing their `doc.md` and `map.md` with timestamps and descriptions extracted from `map.md` Description or `doc.md` Objective in a clean table.
+10. Archive source artifacts while preserving Chain of Truth traceability.
+    - **Copy, do not move-and-delete.** Copy the entire source folder `.lcs/work-items/{timestamp}-{slug-work-item}/` to `.lcs/archive/{timestamp}-{slug-work-item}/` so every artifact (including `code-review.md`) remains readable from the archive.
+    - **Preserve verification artifacts in docs.** After copying, also copy `code-review.md` (if present) into `.lcs/docs/{timestamp}-{slug-work-item}/code-review.md` so the finalization docs and the verification report stay co-located and traceable together.
+    - **Delete source only after both copies succeed.** Remove the source folder `.lcs/work-items/{timestamp}-{slug-work-item}/` completely ONLY after: (a) the archive copy exists, and (b) `code-review.md` (when present) is copied into the docs folder. If any copy fails, abort the delete and alert the user — never leave traceability broken.
+    - **Guard:** Only proceed with copy and delete if both `map.md` and `doc.md` were successfully generated in step 6 and 7. If either file is missing, abort this step and alert the user.
+11. **Stale-State Guard and Registry Cleanup.** After archiving, update `.lcs/state.md`:
+    - **Remove finalized entry from registry:** Delete `work_items[current_work]` from the state.
+    - **Clear selection:** Set `current_work: null` and `current_phase: idle`.
+    - **Update metadata:** Set `timestamp: <current-ISO-timestamp>` and `last_session_note: Finalized and archived {slug-work-item}`.
+    - **Preserve other entries:** All other `work_items` entries remain unchanged. Do not select another item automatically.
+    - If `.lcs/state.md` points to a work-item directory that no longer exists, report it as a stale reference and offer to clean it up.
+    - **Exclusion:** Never touch `.lcs/docs/self-improvements/` (diagnostic history from `lcs-self-improvement`). It is outside the work-item archive scope and must remain intact.
+11. End with a Handoff section.
+
+Prompt templates
+- Starter: "Selesaikan dokumentasi untuk <work-name>"
+- Explicit override: "Selesaikan dokumentasi meskipun ada task yang belum selesai"
+
+---
+
+## Output Template: map.md
+This file indexes the codebase area impacted by this work-item to reduce future token usage. It must be written in English.
+
+```markdown
+# Map: {slug-work-item}
+
+## Description
+<One-line area summary of what this module/feature does>
+
+## Files Impacted
+This section lists only existing files that were modified or created for this work-item.
+* **Modified files**:
+  - `path/to/modified-file-1.ext`
+  - `path/to/modified-file-2.ext`
+* **Created files**:
+  - `path/to/created-file-1.ext`
+
+## Rationale
+* `<file-path>`: <One-line reason why this file was modified or created>
+* `<file-path>`: <One-line reason why this file was modified or created>
+
+## System Relations
+<One-line explanation of how this feature/module interacts with other parts of the system, e.g., database, auth, UI>
+```
+
+---
+
+## Output Template: doc.md
+This file acts as the canonical feature specification and PR summary. It must be written in English.
+
+```markdown
+# Documentation: {slug-work-item}
+
+## Objective
+<Direct summary of goals achieved by this work-item>
+
+## Context & Background
+<Why this work-item was implemented, linking back to original explore.md or prd.md findings>
+
+## Functional Changes
+<Bullet list of user-facing or programmatic changes introduced>
+
+## Verification & Test Results
+<List of tests executed, test commands run, and results confirming success>
+
+## Recommended Git Commit
+```text
+{type}(<scope>): <short description>
+
+- <bullet points detailing change 1>
+- <bullet points detailing change 2>
+```
+
+## Recommended PR Description
+```markdown
+### Summary
+<High-level summary of the changes>
+
+### Key Changes
+- **Feature A**: <detail>
+- **Refactoring**: <detail>
+
+### How to Test
+1. Run `<test command>`
+2. Verify `<expected outcome>`
+```
+
+## Task List
+Read all task files from `.lcs/work-items/{timestamp}-{slug-work-item}/task/` folder and list completed tasks in concise, clear English using natural, professional language that sounds human and semi-formal, without being overly technical. Use bullet point format.
+
+Example:
+- Implemented user authentication with JWT tokens
+- Created database migration for user profiles table
+- Added input validation for registration form
+
+## Chain of Truth Report
+### Level
+Strict
+
+### Sources Checked
+- `.lcs/state.md`
+- `.lcs/work-items/{timestamp}-{slug-work-item}/task/task-*.md`
+- `.lcs/work-items/{timestamp}-{slug-work-item}/prd-enhanced.md`
+- `.lcs/work-items/{timestamp}-{slug-work-item}/code-review.md` (if present)
+
+### Assumptions
+- <label each [verified] or [unverified]>
+
+### Plan
+<Enumerated steps>
+
+### Actions Taken
+<Per-step record>
+
+### Verification
+<Automated checks attempted; document every failure>
+
+### Report
+<Explicit pass/fail per acceptance criterion>
+
+## Handoff
+Next recommended skill: none (workflow complete)
+Next file to read: .lcs/docs/{timestamp}-{slug-work-item}/doc.md
+Current phase: complete
+Current confidence: high
+Blocking questions: None
+Risks to carry forward: None
+Source of Truth Bundle: .lcs/state.md, explore.md if present, prd-enhanced.md if present, prd.md, srs.md if present, tests.md if present, task-coverage.md if present, traceability.md if present, code-review.md if present
+Must Preserve IDs: <SRC/FR/AC/TEST IDs covered by finalized work>
+Unresolved IDs: <list or None>
+Suggested next command: Buat PR dengan pesan yang direkomendasikan
+```
+
+---
+
+## Output Template: docs-index.md
+This file contains the table of contents of all generated documentation references. It is a navigation artifact and MUST carry OKF frontmatter with `artifact_type: index` so whole-directory scans (e.g. `validate-okf.py .lcs/docs/`) pass.
+
+```markdown
+---
+title: "Documentation References Index"
+format_version: "okf/0.2"
+authors:
+  - type: agent
+    name: "lcs-doc-finalizer"
+created: "{YYYY-MM-DD}"
+updated: "{YYYY-MM-DD}"
+tags: [index, docs]
+summary: "Table of contents of all finalized documentation"
+status: active
+related: []
+artifact_type: index
+source: ".lcs/docs/"
+cot_level: strict
+version: "1.0"
+---
+
+# Documentation References Index
+
+| Timestamp | Work Item | Description | Map | Documentation |
+|-----------|-----------|-------------|-----|---------------|
+| {timestamp} | {slug-work-item} | {one-line summary extracted from map.md Description} | [Map](./{timestamp}-{slug-work-item}/map.md) | [Doc](./{timestamp}-{slug-work-item}/doc.md) |
+```
+
+## Chain of Truth Level
+
+Level: Strict
+
+This skill follows the LCS Chain of Truth protocol at the declared level.

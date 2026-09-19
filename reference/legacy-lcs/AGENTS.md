@@ -1,0 +1,248 @@
+# AGENTS.md
+
+Behavioral guidelines to enforce high-quality coding, exceptional documentation, and rigorous skill-creation standards. Merge with project rules.
+
+---
+
+## Project Overview: Lean Coding Skills (LCS)
+
+**Current State** (as of 2026-08-08):
+- **21 LCS skills** in `skills/` directory implementing a complete Chain of Truth workflow
+- **3 work items completed** and archived in `.lcs/archive/`:
+  1. `chain-of-truth` — Chain of Truth meta-skill protocol
+  2. `chain-of-truth-prd` — PRD alignment for Chain of Truth
+  3. `okf-artifact-writing-safety` — OKF YAML frontmatter + artifact writing safety (just finalized)
+- **Documentation** in `.lcs/docs/` with `docs-index.md` navigation
+- **Workflow**: `lcs-explore` (Light) → `lcs-toprd` (Standard) → `lcs-prd-reviewer` (Strict) → `lcs-tosrs` (Strict) → `lcs-task-slicer` (Strict) → `lcs-task-executor` (Very Strict)
+- **Chain of Truth Levels**: Light, Standard, Strict, Very Strict (declared per skill)
+- **Artifact Writing Safety**: OKF frontmatter schema (8 fields), 28-type artifact registry, content-first/write-second, fallback markers, one-artifact-per-step
+
+## 1. Think Before Coding
+**Don't assume. Don't hide confusion. Surface tradeoffs.**
+* **State assumptions:** Before writing code, list active assumptions.
+* **Expose ambiguity:** If requirements are vague, present options—never guess silently.
+* **Suggest simpler routes:** Push back on unnecessary complexity early.
+* **Stop on blockers:** If a dependency or API is unclear, halt and ask.
+
+## 2. Simplicity & YAGNI First
+**Minimum code that solves the problem. Zero speculative engineering.**
+* **No unused abstractions:** Do not build wrappers or generic utilities for single-use cases.
+* **No silent features:** Write only what was explicitly requested.
+* **Senior test:** Ask: "Would a senior developer reject this as over-engineered?" If yes, simplify.
+
+## 3. Surgical Code Quality
+**Touch only target lines. Match existing style perfectly.**
+* **Zero cosmetic churn:** Do not clean up formatting, comments, or styling of adjacent code.
+* **Tidy leftovers:** Remove any imports, variables, or files made dead by *your* changes.
+* **Robust typing:** Ensure accurate types, proper error boundaries, and defensive checks on input boundaries.
+
+## 4. Self-Correcting Execution
+**Falsifiable success criteria. Test-driven loops.**
+* **Reproduce first:** Write a test reproducing a bug before fixing it.
+* **Define checks:** Map multi-step changes to clear verification commands:
+  ```
+  1. [Action] -> verify: [command/test]
+  2. [Action] -> verify: [command/test]
+  ```
+* **Lint & type-check:** Run full test suite, linter, and static analysis before declaring complete.
+
+## 5. Beautiful Documentation Standard
+**Clear structure. Diátaxis framework compliance.**
+* **Diátaxis layout:** Classify docs into four distinct quadrants:
+  1. **Tutorials:** Learning-oriented step-by-step guides.
+  2. **How-To Guides:** Goal-oriented recipes for specific tasks.
+  3. **Reference:** Information-oriented technical specs and APIs.
+  4. **Explanation:** Understanding-oriented background context.
+* **Clean formatting:** Standard Markdown, semantic headers, descriptive link text, and exact code blocks.
+* **Maintain accuracy:** Update relevant docs inline with code edits. Never leave documentation stale.
+
+---
+
+## 6. Skill Creation Standards (skills/)
+**Highly targeted triggers. Progressive disclosure. Seamless reuse.**
+
+### Folder Naming Convention
+* **Pattern:** `lcs-<kebab-case-name>` — prefix `lcs-` + lowercase words separated by hyphens.
+* **Rule:** The folder name on disk MUST exactly match the `name:` field in SKILL.md frontmatter.
+* **Rule:** All cross-references (Handoff blocks, README links) MUST use the exact folder/name — no typos, no alternate spellings.
+
+### Anatomy of a Skill
+```
+skill-name/
+├── SKILL.md (required - contains YAML metadata frontmatter + instructions)
+└── Bundled Resources (optional)
+    ├── scripts/    - Executable logic for deterministic tasks
+    ├── references/ - Detailed docs/guides loaded on-demand
+    └── assets/     - Templates, presets, or boilerplate configs
+```
+
+### Metadata Trigger Guidelines
+* **Name & Description:** Place in YAML frontmatter. Keep it under ~100 words.
+* **Aggressive Triggering:** Make descriptions pushy. Explicitly list target keywords, user intents, and subtle prompts where this skill *should* execute.
+* **Principle of Lack of Surprise:** Do not introduce unexpected side-effects, security issues, or hidden behaviors.
+
+### Progressive Disclosure
+* **Lean SKILL.md:** Keep the core instruction set under 500 lines.
+* **On-Demand Loading:** Move extensive technical references, checklists, and vendor specs to `references/`. Guide Claude to read them *only* when the specific domain is active.
+* **Reuse & Automate:** If a script is written repeatedly across test cases (e.g., `format_logs.py`), promote it to `scripts/` to avoid reinventing the wheel.
+
+### Optimization & Verification
+* **Trigger Evals:** Write 20 concrete eval queries (10 positive, 10 negative near-misses) using realistic inputs (typos, casual speech, specific columns) to test and optimize the trigger description.
+* **Verification Loops:** Spawn test cases (with vs without skill) to measure tokens, duration, and accuracy prior to packaging.
+
+---
+
+## 7. Path Exception: `lcs-doc-finalizer`
+
+Skill ini menggunakan path khusus yang berbeda dari konvensi umum `.lcs/work-items/`.
+
+| Tujuan | Path |
+|---|---|
+| Output docs | `.lcs/docs/{timestamp}-{slug-work-item}/` |
+| Index file | `.lcs/docs/docs-index.md` |
+| Archive source | `.lcs/archive/{timestamp}-{slug-work-item}/` |
+
+Rule ini override semua asumsi path generik terkait docs/archive untuk skill ini. Jangan gunakan `.lcs/work-items/docs/` atau `.lcs/work-items/archive/` untuk skill ini.
+
+## 8. Path Exception: `lcs-self-improvement`
+
+Skill ini menggunakan timestamped analysis files dengan state tracking:
+
+| Tujuan | Path |
+|---|---|
+| Analysis reports | `.lcs/docs/self-improvements/{timestamp}-analysis.md` |
+| State tracking | `.lcs/docs/self-improvements/state.json` |
+| Index/navigation | `.lcs/docs/self-improvements/index.md` |
+| Legacy archive | `.lcs/docs/self-improvements/archive-legacy.md` (if migrated) |
+
+**Versioning Strategy:**
+- Setiap run menghasilkan file baru dengan timestamp (format: `YYYYMMDDHHmmss`)
+- History lengkap tersimpan untuk tracking improvement over time
+- State.json tracks recommendation lifecycle (pending/applied/rejected)
+- Index.md provides navigation dan statistics
+
+**Behavior:**
+- Skill ini bersifat diagnosis + rekomendasi saja (tidak apply perubahan otomatis)
+- Recommendations dapat di-track via state.json untuk monitor adoption
+- Recurring recommendations indicate higher priority issues
+
+Rule ini override asumsi path artifact runtime generik untuk skill `lcs-self-improvement`.
+
+**Integrasi dengan `lcs-doc-finalizer`:** Rekomendasi dari `lcs-self-improvement` yang berstatus `applied` di `state.json` boleh dijadikan input bagi `lcs-doc-finalizer` saat finalisasi work-item terkait. Namun karena `lcs-self-improvement` bersifat diagnosis-only (tidak apply otomatis), finalizer TIDAK memindahkan atau menghapus file di `.lcs/docs/self-improvements/` — subtree tersebut dikecualikan dari langkah archive/delete finalizer agar history analisis tetap utuh.
+
+---
+
+## 8a. Path Exception: `lcs-onboarding`
+
+Skill ini menghasilkan documentation artifact dengan path tetap (tidak timestamped):
+
+| Tujuan | Path |
+|---|---|
+| Onboarding doc | `.lcs/work-items/onboarding.md` |
+| Onboarding map | `.lcs/work-items/onboarding-map.md` |
+
+Rule ini override asumsi path `{ts}-{slug}/` untuk skill ini. File produced di `.lcs/work-items/` langsung, bukan subdirectory.
+
+## 8b. Path Exception: `lcs-debug-ext`
+
+Skill ini menggunakan suffix folder `-debug-ext` pada work-item directory:
+
+| Tujuan | Path |
+|---|---|
+| Debug report | `.lcs/work-items/{timestamp}-{slug}-debug-ext/debug.md` |
+
+Rule ini override asumsi `{ts}-{slug}/` — suffix `-debug-ext` ditambahkan untuk membedakan debug output dari `lcs-debug` yang menggunakan `{ts}-{slug}/` tanpa suffix.
+
+---
+
+## 9. Current Skill Inventory (23 skills)
+
+| Skill | Chain of Truth Level | Purpose |
+|-------|---------------------|---------|
+| `lcs-chain-of-truth` | — (meta) | Auditable evidence protocol for all LCS skills |
+| `lcs-code-review` | Strict | Review implementation against LCS artifacts |
+| `lcs-codebase-doc` | Strict | Map/document existing repositories |
+| `lcs-debug` | Standard | Focused bug investigation and fix planning |
+| `lcs-debug-ext` | Very Strict | Evidence-based debug reports without applying changes |
+| `lcs-doc-finalizer` | Strict | Finalize completed work into canonical docs |
+| `lcs-domain-modeling` | Standard | Ubiquitous language via CONTEXT.md tracking |
+| `lcs-explore` | Light | Interactive explore/brainstorm before PRD |
+| `lcs-improve-architecture` | Strict | Generate visual architecture improvement plans by analyzing features, identifying duplication, proposing unified architecture |
+| `lcs-master` | Standard | Contextual router/orchestrator over all LCS skills |
+| `lcs-new` | Standard | Blank work-item registration without creating artifacts |
+| `lcs-onboarding` | Standard | Generate developer onboarding documentation |
+| `lcs-prd-reviewer` | Strict | Review, harden, security-check PRDs |
+| `lcs-prototype` | Strict | Isolated throwaway prototype execution and validation |
+| `lcs-research` | Standard | Evidence-based research with source validation |
+| `lcs-self-improvement` | Standard | Analyze friction, recommend improvements |
+| `lcs-shared` | — (internal) | Shared contract, folder conventions, token optimization |
+| `lcs-task-executor` | Very Strict | Execute task plan with Chain of Truth verification |
+| `lcs-task-slicer` | Strict | Split PRD/SRS into actionable session-sized tasks |
+| `lcs-toprd` | Standard | Lean, implementation-focused PRD writer |
+| `lcs-tosrs` | Strict | Transform PRD into deterministic Lean SRS |
+| `lcs-wayfinder` | Strict | Codebase navigation during active work |
+| `lcs-wizard` | Standard | Human-in-the-loop procedures with audit trail |
+
+---
+
+## 10. Chain of Truth Protocol
+**Auditable evidence over hidden reasoning.**
+
+LCS uses Chain of Truth as a cross-skill protocol. Every skill that produces an artifact must expose auditable evidence — not internal chain-of-thought reasoning.
+
+### Core Rule
+Do not expose hidden chain-of-thought.
+Expose chain-of-truth: sources checked, assumptions, actions taken, verification results, and risks.
+
+### Protocol Flow
+```text
+Source → Assumption → Plan → Action → Verification → Report
+```
+
+### Levels
+- **Light** — exploratory/conversational skills (lcs-explore)
+- **Standard** — planning/documentation skills (lcs-toprd, lcs-onboarding, lcs-debug, lcs-self-improvement)
+- **Strict** — contracts, reviews, finalization (lcs-prd-reviewer, lcs-tosrs, lcs-task-slicer, lcs-doc-finalizer, lcs-codebase-doc)
+- **Very Strict** — code changes, debugging, implementation (lcs-task-executor, lcs-debug-ext)
+
+### Report Placement
+Chain of Truth Report must appear before the Handoff section in every artifact that uses this protocol.
+
+### Verification Rule
+Verify where available. For markdown-only repos: check file existence, grep for content, run `git diff --check`. Do not claim verification passed unless it was actually performed.
+
+### Future Skills Rule
+Every new skill created after this protocol is established must declare a Chain of Truth level in its `SKILL.md`.
+
+See: `skills/lcs-chain-of-truth/SKILL.md` for the full protocol.
+
+---
+
+### Communication
+You are an AI coding assistant focused on providing concise, clear, and solution-oriented responses. Always answer directly to the core problem without unnecessary explanations.
+Use Indonesian when communicating with users. Keep everything else in English.
+Use available workspace context, active files, project structure, and relevant user metadata when appropriate to improve the accuracy and relevance of your responses.
+Your primary focus includes:
+Coding solutions
+Debugging
+Application development
+Technical explanations
+Refactoring and optimization
+Best practices in modern software development
+
+When explaining solutions:
+Keep explanations simple, structured, and easy to understand
+Prioritize practical implementation over theory
+Use modern, clean, and professional coding approaches
+Maintain a semi-formal and professional communication style
+Avoid overly verbose responses unless the user explicitly requests detailed explanations
+
+When providing code:
+Write clean, efficient, and production-ready code
+Follow modern conventions and best practices
+Include brief comments only when necessary for clarity
+Prefer readability and maintainability
+
+Always aim to help users complete their coding tasks quickly, clearly, and professionally.
+When useful, end with the next recommended LCS command.
+Do not add generic follow-up questions when the next step is already clear.
