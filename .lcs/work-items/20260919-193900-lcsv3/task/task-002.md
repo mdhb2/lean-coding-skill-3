@@ -1,72 +1,50 @@
 ---
-title: "Task 002: lcs3 init + .lcs3/ root + central policy"
+title: "TASK-002: Legacy read-only reference mount"
 format_version: "okf/0.2"
 authors:
   - type: agent
     name: "lcs-task-slicer"
-created: 2026-09-19
-updated: 2026-09-19
+created: "2026-09-19"
+updated: "2026-09-19"
 artifact_type: task
-cot_level: very_strict
+cot_level: standard
 version: "1.0"
 status: pending
-tags: [task, implementation]
-summary: "lcs3 CLI init command creates .lcs3/ root and central policy file"
-source: "srs.md"
-related: ["task-coverage.md"]
-blocked_by: TASK-001
+tags: [task]
+task_id: "TASK-002"
+depends_on: [TASK-001]
+mode: "AFK"
+summary: "Mount reference/legacy-lcs read-only; reject writes."
+related_fr: [FR-003]
+related_ac: [AC-006]
+related_test: [TEST-010,TEST-028]
 ---
 
-# TASK-002: lcs3 init + .lcs3/ root + central policy
+# TASK-002: Legacy read-only reference mount
 
-* **Status**: pending
-* **Type**: AFK
-* **Depends on**: TASK-001
-* **Source coverage**:
-  - Requirements: FR-005, FR-006
-  - Acceptance Criteria: AC-001, AC-002, AC-004
-* **Priority**: high
-* **Scope**: `lcs3 init` command scaffolds `.lcs3/` directory tree and writes a central policy file governing runtime behavior defaults.
-* **Files likely touched**:
-  - cli/init.* (command entrypoint)
-  - .lcs3/policy.* (generated)
-* **Implementation notes**:
-  - Idempotent init: re-running should not destroy existing state.
-  - Policy file holds defaults referenced by later manifest/validation tasks (TASK-003).
-* **Acceptance criteria**:
-  - [ ] `lcs3 init` creates `.lcs3/` with expected subdirs
-  - [ ] Central policy file is valid and loadable
-  - [ ] Re-running init is safe (no data loss)
-* **Test plan**:
-  - Unit: init on empty dir, init on existing dir (idempotency).
+## Scope
+Mount reference/legacy-lcs read-only; reject writes.
+
+## Read scope
+Declared narrowly: this task's own migration-matrix.md entry (if skill-gen), directly relevant FR/AC rows in traceability.md, and its own legacy skill dir under reference/legacy-lcs/skills/ if applicable. Do not read the full legacy repo or full PRD/SRS.
+
+## Write scope
+LCS3 runtime/manifest/skill files relevant to this task only. Never write under reference/legacy-lcs/ (read-only, BR-004).
+
+## Requirements covered
+FR: FR-003
+AC: AC-006
+
+## Verification
+Tests: TEST-010,TEST-028
 
 ## Chain of Truth Report
-### Level
-Strict
-### Sources Checked
-- srs.md, prd.md, task-001.md
-### Assumptions
-- Policy file format (YAML/JSON) decided at implementation time [unverified]
-### Plan
-1. Implement init command. 2. Write policy schema. 3. Idempotency test.
-### Actions Taken
-Not yet started.
-### Verification
-Pending.
-### Report
-Pending.
+- Requirement source: prd.md / srs.md (see traceability.md row)
+- Evidence: task-coverage.md, migration-matrix.md (if skill-gen)
+- Assumptions: none beyond migration-matrix disposition for this skill
 
-## Blocking Edges & Expand-Contract Pattern
-Blocked by TASK-001. Unblocks TASK-003.
+## Blocking Edges
+Depends on: TASK-001
 
 ## Handoff
-Next recommended skill: lcs-task-executor
-Next file to read: .lcs/work-items/20260919-193900-lcsv3/task/task-003.md
-Current phase: tasks
-Current confidence: high
-Blocking questions: None
-Risks to carry forward: None
-Source of Truth Bundle: .lcs/state.md, prd.md, srs.md, task-coverage.md
-Must Preserve IDs: FR-005, FR-006, AC-001, AC-002, AC-004
-Unresolved IDs: None
-Suggested next command: Eksekusi TASK-003
+On completion: update task status in runtime state, note any scope expansion explicitly.

@@ -1,73 +1,50 @@
 ---
-title: "Task 004: SQLite runtime-state core + atomic claim/lease"
+title: "TASK-004: Explicit init + central policy"
 format_version: "okf/0.2"
 authors:
   - type: agent
     name: "lcs-task-slicer"
-created: 2026-09-19
-updated: 2026-09-19
+created: "2026-09-19"
+updated: "2026-09-19"
 artifact_type: task
-cot_level: very_strict
+cot_level: standard
 version: "1.0"
 status: pending
-tags: [task, implementation]
-summary: "SQLite-backed runtime state store with atomic task claim and lease/expiry"
-source: "srs.md"
-related: ["task-coverage.md"]
-blocked_by: TASK-003
+tags: [task]
+task_id: "TASK-004"
+depends_on: [TASK-001]
+mode: "AFK"
+summary: "lcs3 init writes explicit policy file, no implicit state creation."
+related_fr: [FR-005,FR-006]
+related_ac: [AC-001,AC-002,AC-004]
+related_test: [TEST-014]
 ---
 
-# TASK-004: SQLite runtime-state core + atomic claim/lease
+# TASK-004: Explicit init + central policy
 
-* **Status**: pending
-* **Type**: AFK
-* **Depends on**: TASK-003
-* **Source coverage**:
-  - Requirements: FR-016, FR-017, FR-018, FR-025
-  - Acceptance Criteria: AC-011, AC-012, AC-013, AC-014
-* **Priority**: high
-* **Scope**: Dynamic execution state (task lifecycle, ownership) lives in SQLite per AGENTS.md §7/§11. Implement atomic claim (compare-and-swap) and lease with expiry so two workers cannot own the same task.
-* **Files likely touched**:
-  - runtime/db/schema.sql
-  - runtime/state_store.*
-  - runtime/claim.*
-* **Implementation notes**:
-  - Claim must be atomic transaction (SQLite `BEGIN IMMEDIATE` or equivalent).
-  - Lease expiry triggers automatic re-claimability.
-* **Acceptance criteria**:
-  - [ ] Two concurrent claim attempts on same task: exactly one succeeds
-  - [ ] Expired lease allows re-claim
-  - [ ] State survives process restart (durable SQLite file)
-* **Test plan**:
-  - Integration: concurrent claim race test, lease expiry test, restart durability test.
+## Scope
+lcs3 init writes explicit policy file, no implicit state creation.
+
+## Read scope
+Declared narrowly: this task's own migration-matrix.md entry (if skill-gen), directly relevant FR/AC rows in traceability.md, and its own legacy skill dir under reference/legacy-lcs/skills/ if applicable. Do not read the full legacy repo or full PRD/SRS.
+
+## Write scope
+LCS3 runtime/manifest/skill files relevant to this task only. Never write under reference/legacy-lcs/ (read-only, BR-004).
+
+## Requirements covered
+FR: FR-005,FR-006
+AC: AC-001,AC-002,AC-004
+
+## Verification
+Tests: TEST-014
 
 ## Chain of Truth Report
-### Level
-Strict
-### Sources Checked
-- srs.md, prd.md, AGENTS.md §6,§7,§11
-### Assumptions
-- None
-### Plan
-1. Schema design. 2. Claim/lease logic. 3. Concurrency tests.
-### Actions Taken
-Not yet started.
-### Verification
-Pending.
-### Report
-Pending.
+- Requirement source: prd.md / srs.md (see traceability.md row)
+- Evidence: task-coverage.md, migration-matrix.md (if skill-gen)
+- Assumptions: none beyond migration-matrix disposition for this skill
 
-## Blocking Edges & Expand-Contract Pattern
-Blocked by TASK-003. Unblocks TASK-005, TASK-009, TASK-015, TASK-016.
+## Blocking Edges
+Depends on: TASK-001
 
 ## Handoff
-Next recommended skill: lcs-task-executor
-Next file to read: .lcs/work-items/20260919-193900-lcsv3/task/task-005.md
-Current phase: tasks
-Current confidence: high
-Blocking questions: None
-Risks to carry forward: None
-Source of Truth Bundle: .lcs/state.md, prd.md, srs.md, task-coverage.md
-Must Preserve IDs: FR-016, FR-017, FR-018, FR-025, AC-011, AC-012, AC-013, AC-014
-Unresolved IDs: None
-Suggested next command: Eksekusi TASK-005
+On completion: update task status in runtime state, note any scope expansion explicitly.

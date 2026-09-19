@@ -1,72 +1,50 @@
 ---
-title: "Task 003: Canonical manifest loader + drift validation"
+title: "TASK-003: Migration-matrix gate wiring"
 format_version: "okf/0.2"
 authors:
   - type: agent
     name: "lcs-task-slicer"
-created: 2026-09-19
-updated: 2026-09-19
+created: "2026-09-19"
+updated: "2026-09-19"
 artifact_type: task
-cot_level: very_strict
+cot_level: standard
 version: "1.0"
 status: pending
-tags: [task, implementation]
-summary: "Loader for canonical manifests with drift detection against derived artifacts"
-source: "srs.md"
-related: ["task-coverage.md"]
-blocked_by: TASK-002
+tags: [task]
+task_id: "TASK-003"
+depends_on: [TASK-001]
+mode: "HITL"
+summary: "Wire migration-matrix.md sign-off as hard gate for all skill-gen tasks."
+related_fr: [FR-004,FR-068]
+related_ac: [AC-057,AC-058]
+related_test: [TEST-027,TEST-030,TEST-031]
 ---
 
-# TASK-003: Canonical manifest loader + drift validation
+# TASK-003: Migration-matrix gate wiring
 
-* **Status**: pending
-* **Type**: AFK
-* **Depends on**: TASK-002
-* **Source coverage**:
-  - Requirements: FR-010, FR-011, FR-012, FR-013
-  - Acceptance Criteria: AC-004, AC-005, AC-009, AC-056
-* **Priority**: high
-* **Scope**: Load canonical manifests (skill manifests, artifact-type registry) and validate no drift between canonical source and derived/generated copies.
-* **Files likely touched**:
-  - runtime/manifest_loader.*
-  - runtime/drift_validator.*
-* **Implementation notes**:
-  - Manifest schema must classify each artifact as canonical vs derived (AGENTS.md §7).
-  - Drift validation runs on demand and via doctor (TASK-016).
-* **Acceptance criteria**:
-  - [ ] Manifest loader parses and validates schema
-  - [ ] Drift check flags mismatched derived artifacts
-  - [ ] Canonical/derived classification enforced
-* **Test plan**:
-  - Unit: valid manifest load, corrupted manifest rejection, drift detection on stale derived file.
+## Scope
+Wire migration-matrix.md sign-off as hard gate for all skill-gen tasks.
+
+## Read scope
+Declared narrowly: this task's own migration-matrix.md entry (if skill-gen), directly relevant FR/AC rows in traceability.md, and its own legacy skill dir under reference/legacy-lcs/skills/ if applicable. Do not read the full legacy repo or full PRD/SRS.
+
+## Write scope
+LCS3 runtime/manifest/skill files relevant to this task only. Never write under reference/legacy-lcs/ (read-only, BR-004).
+
+## Requirements covered
+FR: FR-004,FR-068
+AC: AC-057,AC-058
+
+## Verification
+Tests: TEST-027,TEST-030,TEST-031
 
 ## Chain of Truth Report
-### Level
-Strict
-### Sources Checked
-- srs.md, prd.md, AGENTS.md §7
-### Assumptions
-- None unverified beyond schema format choice
-### Plan
-1. Define manifest schema. 2. Implement loader. 3. Implement drift check.
-### Actions Taken
-Not yet started.
-### Verification
-Pending.
-### Report
-Pending.
+- Requirement source: prd.md / srs.md (see traceability.md row)
+- Evidence: task-coverage.md, migration-matrix.md (if skill-gen)
+- Assumptions: none beyond migration-matrix disposition for this skill
 
-## Blocking Edges & Expand-Contract Pattern
-Blocked by TASK-002. Unblocks TASK-004, TASK-012, TASK-013, TASK-014.
+## Blocking Edges
+Depends on: TASK-001
 
 ## Handoff
-Next recommended skill: lcs-task-executor
-Next file to read: .lcs/work-items/20260919-193900-lcsv3/task/task-004.md
-Current phase: tasks
-Current confidence: high
-Blocking questions: None
-Risks to carry forward: None
-Source of Truth Bundle: .lcs/state.md, prd.md, srs.md, task-coverage.md
-Must Preserve IDs: FR-010, FR-011, FR-012, FR-013, AC-004, AC-005, AC-009, AC-056
-Unresolved IDs: None
-Suggested next command: Eksekusi TASK-004
+On completion: update task status in runtime state, note any scope expansion explicitly.
