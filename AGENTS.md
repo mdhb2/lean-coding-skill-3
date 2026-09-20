@@ -25,7 +25,7 @@ Use this precedence when sources conflict:
 2. canonical LCS3 artifacts in the active work-item;
 3. approved ADRs / project-level decisions;
 4. verified current repository evidence;
-5. approved Legacy Skill Migration Matrix;
+5. approved Legacy Skill Migration Matrix (`docs/legacy-skill-matrix.md`);
 6. project memory;
 7. derived/generated artifacts and Context Capsules;
 8. legacy LCS reference material.
@@ -55,6 +55,8 @@ Rules:
 If the legacy reference is supplied as a Git submodule or separate clone, do not change its pinned revision unless the task explicitly requires it.
 
 ## 4. Mandatory Legacy Skill Migration Matrix
+
+Canonical location: `docs/legacy-skill-matrix.md`. This file is the single approved-matrix artifact; do not create a duplicate elsewhere.
 
 Before implementing the initial LCS3 skill family, inspect every legacy LCS skill and classify it exactly once as one of:
 
@@ -143,9 +145,11 @@ Every artifact type must be clearly classified as:
 
 Derived artifacts and Context Capsules are caches/views. They must never silently become a higher authority than their canonical sources.
 
-`prd.md` is the canonical PRD.
+Canonical location: `docs/prd.md`. This file is the canonical PRD; do not create a duplicate elsewhere.
 
 `prd-review.md` contains reviewer findings and proposed hardening; it is not a second canonical PRD.
+
+Canonical location: `docs/lcs3-worker-task-plan.md`. This file is the single approved worker task plan artifact; do not create a duplicate elsewhere.
 
 ## 8. Requirement Traceability
 
@@ -351,3 +355,9 @@ Before broad implementation begins, the following must be resolved:
 5. PRD review and downstream SRS/system design.
 
 When a requested task conflicts with these gates, preserve the requested work but do not silently bypass the required design decision.
+
+## 21. Staged Task Execution
+
+Execute `L3-###` tasks in `docs/lcs3-worker-task-plan.md` staged (bertahap): in phase order (Phase 0..7), respecting task dependencies and the plan's gates (`GATE-01`..`GATE-05`). Do not skip an unapproved gate to reach a later phase.
+
+After a task's Worker Result Contract reports `status: PASS` and verification ran, update that task's status to done/selesai directly in `docs/lcs3-worker-task-plan.md` before starting a dependent task.
