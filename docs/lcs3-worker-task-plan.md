@@ -355,8 +355,9 @@ A later phase must not start until its required gate is approved.
 
 **Verify:** commit/rollback tests; concurrent write behavior tested.
 
-## L3-016 - Implement Task Execution State Machine
+## L3-016 - Implement Task Execution State Machine — DONE ✅ 2026-09-20
 
+**Status:** PASS — `src/transitions.ts` (machine loaded from canonical lifecycle.yaml, canTransition/assertTransition/createTask/transitionTask) + `test/transitions.test.ts` 7/7 (23 legal edges, 6 illegal, terminal block, review-fix loop, AC-014 cross-talk, row-unchanged, unknown-task); full suite 63/63 pass, typecheck/lint clean
 **Owner:** CHEAP_WORKER  
 **Depends:** GATE-03, L3-015  
 **Covers:** SRC-019..SRC-023, SRC-039; AC-014, AC-019..AC-023
