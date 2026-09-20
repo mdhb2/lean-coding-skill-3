@@ -316,8 +316,9 @@ A later phase must not start until its required gate is approved.
 
 **Verify:** fresh init succeeds; second init is safe; existing `.lcs/` does not affect output; malformed existing `.lcs3/` returns error.
 
-## L3-013 - Add Contract Drift Regression Suite
+## L3-013 - Add Contract Drift Regression Suite — DONE ✅ 2026-09-20
 
+**Status:** PASS — `test/drift.test.ts` 6/6 (repo canonical passes, init templates byte-identical, config↔quality cross-file, missing-skill/unknown-group/corrupt-template fail); full suite 41/41 pass, typecheck/lint clean
 **Owner:** CHEAP_WORKER  
 **Depends:** L3-008..L3-012  
 **Covers:** SRC-010, SRC-060, SRC-061; AC-004..AC-006, AC-054, AC-056
