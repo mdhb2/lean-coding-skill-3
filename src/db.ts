@@ -20,7 +20,7 @@ export interface BootstrapResult {
   errors: DbError[];
 }
 
-export const SCHEMA_VERSION = 4;
+export const SCHEMA_VERSION = 5;
 export const STATE_DB_REL = ".lcs3/state.db";
 
 // ponytail: migrations append-only; repair/normalize helpers stay out unless a
@@ -72,6 +72,20 @@ const MIGRATIONS: Migration[] = [
       reason TEXT NOT NULL,
       updated_at TEXT NOT NULL
     );`,
+  },
+  {
+    version: 5,
+    name: "runtime-review-findings-table",
+    sql: `CREATE TABLE IF NOT EXISTS review_findings (
+      finding_id TEXT PRIMARY KEY,
+      task_id TEXT NOT NULL,
+      target TEXT NOT NULL,
+      evidence TEXT NOT NULL,
+      status TEXT NOT NULL,
+      history TEXT NOT NULL,
+      updated_at TEXT NOT NULL
+    );
+    CREATE INDEX IF NOT EXISTS idx_findings_task ON review_findings(task_id);`,
   },
 ];
 

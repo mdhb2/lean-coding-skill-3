@@ -54,6 +54,9 @@ artifact_types:
   - name: wayfinder
     authority: canonical
     cot_level: standard
+  - name: capsule
+    authority: derived
+    cot_level: strict
 # Required frontmatter per artifact (GATE-02 §5). `type` forbidden except `state`.
 required_fields: [title, format_version, authors, created, updated, artifact_type, source, cot_level]
 recommended_fields: [tags, summary, status, related]

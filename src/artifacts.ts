@@ -1,6 +1,6 @@
-import { existsSync, readFileSync } from "node:fs";
-import { join } from "node:path";
-import { load as yamlLoad } from "js-yaml";
+import { existsSync, readFileSync, writeFileSync, mkdirSync } from "node:fs";
+import { join, dirname } from "node:path";
+import { load as yamlLoad, dump as yamlDump } from "js-yaml";
 import type { ValidationError } from "./manifests.js";
 
 export interface ParsedArtifact {
@@ -142,4 +142,62 @@ export function validateArtifactContent(content: string, manifestDir: string): V
   }
 
   return out;
+}
+
+export function serializeArtifact(data: Record<string, unknown>, body: string): string {
+  const yaml = yamlDump(data, { lineWidth: 120, noRefs: true }).trimEnd();
+  return `---\n${yaml}\n---\n${body}`;
+}
+
+export function readArtifactFile(
+  filePath: string,
+  manifestDir: string,
+): { parsed: ParsedArtifact | null; errors: ValidationError[]; raw: string | null } {
+  if (!existsSync(filePath)) return { parsed: null, errors: [{ file: filePath, message: "file not found" }], raw: null };
+  const raw = readFileSync(filePath, "utf8");
+  const { parsed, errors: parseErrors } = parseArtifact(raw);
+  if (!parsed) return { parsed: null, errors: parseErrors.map((e) => ({ ...e, file: filePath })), raw };
+  const vErrors = validateArtifactContent(raw, manifestDir).map((e) => ({ ...e, file: filePath }));
+  return { parsed, errors: vErrors, raw };
+}
+
+export function writeCanonicalArtifact(
+  filePath: string,
+  data: Record<string, unknown>,
+  body: string,
+  manifestDir: string,
+): ValidationError[] {
+  const at = typeof data.artifact_type === "string" ? data.artifact_type : "";
+  const auth = at ? getArtifactAuthority(at, manifestDir) : undefined;
+  if (auth === "derived") {
+    return [{ file: filePath, message: `derived artifact_type '${at}' cannot be written through canonical API` }];
+  }
+  if (auth === undefined && at) {
+    // let validateArtifactContent report unknown type, but still block write
+  }
+  const content = serializeArtifact(data, body);
+  const errors = validateArtifactContent(content, manifestDir).map((e) => ({ ...e, file: filePath }));
+  if (errors.length > 0) return errors;
+  mkdirSync(dirname(filePath), { recursive: true });
+  writeFileSync(filePath, content, "utf8");
+  return [];
+}
+
+export function writeDerivedArtifact(
+  filePath: string,
+  data: Record<string, unknown>,
+  body: string,
+  manifestDir: string,
+): ValidationError[] {
+  const at = typeof data.artifact_type === "string" ? data.artifact_type : "";
+  const auth = at ? getArtifactAuthority(at, manifestDir) : undefined;
+  if (auth === "canonical") {
+    return [{ file: filePath, message: `canonical artifact_type '${at}' cannot be written through derived API` }];
+  }
+  const content = serializeArtifact(data, body);
+  const errors = validateArtifactContent(content, manifestDir).map((e) => ({ ...e, file: filePath }));
+  if (errors.length > 0) return errors;
+  mkdirSync(dirname(filePath), { recursive: true });
+  writeFileSync(filePath, content, "utf8");
+  return [];
 }

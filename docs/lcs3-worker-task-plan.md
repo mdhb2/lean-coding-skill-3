@@ -441,8 +441,9 @@ A later phase must not start until its required gate is approved.
 
 # Phase 3 - Artifacts, Provenance, Context, and Verification
 
-## L3-023 - Implement Canonical Artifact Read/Write Service
+## L3-023 - Implement Canonical Artifact Read/Write Service — DONE ✅ 2026-09-20
 
+**Status:** PASS — `src/artifacts.ts` serializeArtifact/readArtifactFile/writeCanonicalArtifact/writeDerivedArtifact; round-trip body identical, derived via canonical blocked, canonical via derived blocked, invalid rejected + file not created, missing file actionable; `npm run typecheck`/`lint` 0, `npm test` 107/107 pass
 **Owner:** CHEAP_WORKER  
 **Depends:** L3-010, GATE-04  
 **Covers:** SRC-011..SRC-016
@@ -451,40 +452,45 @@ A later phase must not start until its required gate is approved.
 
 **Verify:** round-trip preserves metadata/body; derived artifact cannot be written through canonical-only API; invalid metadata rejected.
 
-## L3-024 - Implement Provenance and Freshness Engine
+## L3-024 - Implement Provenance and Freshness Engine — DONE ✅ 2026-09-20
 
+**Status:** PASS — `src/provenance.ts` (digestContent/digestFile sha256, buildProvenance, isStale pure, getDerivedProvenance, checkDerivedFileFreshness) + `test/provenance.test.ts` 4/4 (stable digest, fresh→stale on upstream change, pure isStale, missing provenance not fresh); harness tmp derived fresh true→stale after src change + missing provenance -> not fresh; `typecheck` 0, `lint` 0, `npm test` 111/111 pass
 **Owner:** CHEAP_WORKER  
-**Depends:** L3-023  
+**Depends:** L3-023 — DONE  
 **Covers:** SRC-034, SRC-035; AC-030..AC-032
 
 **Goal:** record source identity/digest and detect stale derived outputs.
 
 **Verify:** unchanged source stays fresh; upstream change marks derived output stale.
 
-## L3-025 - Implement Deterministic Traceability Generator
+## L3-025 - Implement Deterministic Traceability Generator — DONE ✅ 2026-09-20
 
+**Status:** PASS — `src/traceability.ts` (126 lines: parseTraceTask frontmatter-only, buildTraceability sorted/deduped, renderTraceability forward/backward/gaps, generateTraceability via writeDerivedArtifact + buildProvenance, excludes traceability.md/task-coverage.md) harness tmp workItem 3 tasks (TASK-001 SRC-001+AC-010, TASK-002 SRC-001, TASK-003 no covers, body prose trap SRC-999) verified: prose isolated (SRC-999 not in view), gap observable (TASK-003 no covers), regenerate stable, provenance fresh→stale after mutate; `typecheck` 0, `lint` 0, `npm test` 111/111 pass
 **Owner:** CHEAP_WORKER  
-**Depends:** L3-023, L3-024  
+**Depends:** L3-023, L3-024 — DONE  
 **Covers:** SRC-014, SRC-040; AC-010
 
 **Goal:** generate traceability view only from structured canonical relationships.
 
 **Verify:** deleting generated view and regenerating yields equivalent mappings; prose-only guess is never required.
 
-## L3-026 - Implement Deterministic Task-Coverage Generator
+## L3-026 - Implement Deterministic Task-Coverage Generator — DONE ✅ 2026-09-20
 
+**Status:** PASS — `src/coverage.ts` (116 lines: parseCoverageTask frontmatter-only, buildCoverage bySrc/byTest sorted/deduped, renderCoverage SRC/test tables + gaps, generateTaskCoverage via writeDerivedArtifact + buildProvenance) harness same tmp fixture verified: coverage gaps observable, prose isolated, regenerate stable, provenance fresh→stale; `typecheck` 0, `lint` 0, `npm test` 111/111 pass
 **Owner:** CHEAP_WORKER  
-**Depends:** L3-023, L3-024  
+**Depends:** L3-023, L3-024 — DONE  
 **Covers:** SRC-014, SRC-040; AC-010
 
 **Goal:** generate SRC/AC/test/task coverage view from structured metadata.
 
 **Verify:** missing coverage is observable; regenerated result is stable.
 
-## L3-027 - Implement Context Capsule Builder
+## L3-027 - Implement Context Capsule Builder — DONE ✅ 2026-09-20
+
+**Status:** PASS — `src/capsule.ts` (selective derived Context Capsule: parseCapsuleTask frontmatter-only, buildCapsule linkedSources sorted/deduped, generateCapsule via writeDerivedArtifact + buildProvenance on target task file, excludes derived outputs) + artifact_type `capsule` derived added to `.lcs3/manifests/artifacts.yaml` and `src/init.ts` template; harness tmp workItem 3 tasks (TASK-001 SRC-001+AC-010+TEST-001, TASK-002 SRC-001, TASK-003 no covers + prose trap SRC-999) verified: prose isolated (SRC-999 not in capsule), linked included (SRC-001/AC-010/TEST-001), unrelated excluded (SRC-002), peer selective (TASK-002 peer included, TASK-003 not), provenance fresh→stale after mutate TASK-001, regenerate stable; `typecheck` 0, `lint` 0, `npm test` 111/111 pass
 
 **Owner:** CHEAP_WORKER  
-**Depends:** L3-023..L3-026  
+**Depends:** L3-023..L3-026 — DONE  
 **Covers:** SRC-032..SRC-035; AC-029..AC-032
 
 **Goal:** build task-specific derived context from explicitly linked requirements, criteria, tests, decisions, repository evidence, and allowed memory.
@@ -493,18 +499,20 @@ A later phase must not start until its required gate is approved.
 
 **Verify:** unrelated requirements excluded; linked requirements included; stale source invalidates capsule freshness.
 
-## L3-028 - Implement Context Budget Enforcement
+## L3-028 - Implement Context Budget Enforcement — DONE ✅ 2026-09-20
 
+**Status:** PASS — `src/budget.ts` (checkContextBudget/enforceContextBudget pure, P0 set 37, soft trim + hard block, never silent P0 drop, estimateTokens len/4) + `test/budget.test.ts` 6/6 (within, soft trim P0 preserved + non-P0 dropped, soft only-P0 no-op, hard block P0 not dropped, boundaries, invalid inputs); `typecheck` 0, `lint` 0, `npm test` 117/117 pass
 **Owner:** CHEAP_WORKER  
-**Depends:** L3-027, L3-011  
+**Depends:** L3-027, L3-011 — DONE  
 **Covers:** SRC-036
 
 **Goal:** apply approved soft/hard context policy without dropping P0-linked material silently.
 
 **Verify:** soft limit produces controlled trimming/report; hard limit blocks or escalates according to approved policy; P0 preservation tested.
 
-## L3-029 - Implement Verification Recipe Registry
+## L3-029 - Implement Verification Recipe Registry — DONE ✅ 2026-09-20
 
+**Status:** PASS — `src/recipes.ts` (registerRecipe/getRecipe/listRecipes/checkRecipeFreshness, verified-only promotion, provenance via buildProvenance/isStale, JSON at .lcs3/cache/recipes.json) + `test/recipes.test.ts` 5/5 (fresh reuse, stale on upstream change, missing upstream not fresh, unverified blocked, invalid inputs); `typecheck` 0, `lint` 0, `npm test` 122/122 pass
 **Owner:** CHEAP_WORKER  
 **Depends:** L3-011, L3-023  
 **Covers:** SRC-038; AC-035
@@ -513,8 +521,9 @@ A later phase must not start until its required gate is approved.
 
 **Verify:** fresh recipe reused; stale recipe detectable; unverified command is not promoted silently.
 
-## L3-030 - Implement Targeted Task Gate Runner
+## L3-030 - Implement Targeted Task Gate Runner — DONE ✅ 2026-09-20
 
+**Status:** PASS — `src/gates.ts` runTargetedGate (verified-recipe-only, stale/missing blocks never executes, records exact command/output/exitCode/status) + `test/gates.test.ts` 3/3 (pass records evidence, failing command fails, stale/missing blocked); `typecheck` 0, `lint` 0, gates suite 6/6, full `npm test` 128/128 pass
 **Owner:** CHEAP_WORKER  
 **Depends:** L3-029  
 **Covers:** SRC-037; AC-033
@@ -523,8 +532,9 @@ A later phase must not start until its required gate is approved.
 
 **Verify:** failing command fails gate; result records exact command/output/status.
 
-## L3-031 - Implement Work-Item Final Gate Runner
+## L3-031 - Implement Work-Item Final Gate Runner — DONE ✅ 2026-09-20
 
+**Status:** PASS — `src/gates.ts` runFinalGate (own broader suite, always runs independently, targeted pass never substitutes; pass/fail/blocked aggregation) + `test/gates.test.ts` 3/3 (broader suite + targeted-pass-cannot-substitute-failed-final, all-pass + stale-blocks, empty-list blocked); `typecheck` 0, `lint` 0, gates suite 6/6, full `npm test` 128/128 pass
 **Owner:** CHEAP_WORKER  
 **Depends:** L3-029, L3-030  
 **Covers:** SRC-037; AC-034
@@ -537,8 +547,9 @@ A later phase must not start until its required gate is approved.
 
 # Phase 4 - Adaptive Workflow, Autonomy, and Review Loop
 
-## L3-032 - Implement Complexity/Risk Classification Contract
+## L3-032 - Implement Complexity/Risk Classification Contract — DONE ✅ 2026-09-20
 
+**Status:** PASS — `src/classification.ts` classifyWork (caller-supplied complexity/risk, risk dominates, pure no IO) + `test/classification.test.ts` 5/5 (short path, low-complex high-risk deep, invalid labels throw); `typecheck` 0, `lint` 0, `npm test` 133/133 pass
 **Owner:** CHEAP_WORKER  
 **Depends:** GATE-03, L3-009  
 **Covers:** SRC-029, SRC-030; AC-015, AC-016
@@ -547,8 +558,9 @@ A later phase must not start until its required gate is approved.
 
 **Verify:** low-complexity/high-risk case is representable and does not collapse to short path solely due to complexity.
 
-## L3-033 - Implement Adaptive Workflow Router
+## L3-033 - Implement Adaptive Workflow Router — DONE ✅ 2026-09-20
 
+**Status:** PASS — `src/router.ts` (routeWork via lifecycle.yaml workflow_phases + classifyWork, short skips explore/prd_review/srs, nextPhase/canAdvance/assertAdvance adjacent-forward only) + `test/router.test.ts` 9/9 (canonical order, short vs full differ, risk dominates, illegal advance rejected, skipped-phase walk rejected); typecheck 0, lint 0, npm test 142/142 pass
 **Owner:** CHEAP_WORKER  
 **Depends:** L3-032, L3-016  
 **Covers:** SRC-029, SRC-030; AC-015, AC-016
@@ -557,7 +569,9 @@ A later phase must not start until its required gate is approved.
 
 **Verify:** simple/low-risk and complex/high-risk fixtures follow different valid paths; illegal phase transition rejected.
 
-## L3-034 - Implement Bug Fast-Lane Routing
+## L3-034 - Implement Bug Fast-Lane Routing — DONE ✅ 2026-09-20
+
+**Status:** PASS — routeBug() in src/router.ts (scoped=true fast lane shorter than short, skips explore/prd_review/srs+prd; scoped=false escalates full path evidence verbatim; evidence non-empty strings required; scoped caller-supplied boolean never inferred) + 4 bug-lane tests in test/router.test.ts; typecheck 0, lint 0, npm test 146/146 pass
 
 **Owner:** CHEAP_WORKER  
 **Depends:** L3-033  
@@ -567,7 +581,9 @@ A later phase must not start until its required gate is approved.
 
 **Verify:** known bug uses shorter path; ambiguous bug retains evidence when escalated.
 
-## L3-035 - Implement AFK/HITL Policy Evaluator
+## L3-035 - Implement AFK/HITL Policy Evaluator — DONE ✅ 2026-09-20
+
+**Status:** PASS — src/autonomy.ts evaluateAutonomy() (six caller-supplied boolean triggers from SRC-023, routine continues AFK no confirmation, HITL cites concrete triggers) + test/autonomy.test.ts 6/6; typecheck 0, lint 0, npm test 152/152 pass
 
 **Owner:** CHEAP_WORKER  
 **Depends:** L3-021, L3-033  
@@ -577,8 +593,9 @@ A later phase must not start until its required gate is approved.
 
 **Verify:** routine implementation does not request mode confirmation; destructive/credential/business-decision fixture escalates.
 
-## L3-036 - Implement Execution Attempt Controller
+## L3-036 - Implement Execution Attempt Controller — DONE ✅ 2026-09-20
 
+**Status:** PASS — src/attempts.ts runAttempt() (targeted gate -> caller-supplied failureCategory -> recordFailure/retry or escalate; blocked gate escalates without retry budget; no codegen inside controller) + test/attempts.test.ts 6/6; typecheck 0, lint 0, npm test 158/158 pass
 **Owner:** CHEAP_WORKER  
 **Depends:** L3-021, L3-030, L3-035  
 **Covers:** SRC-020..SRC-023; AC-019..AC-023
@@ -589,8 +606,9 @@ A later phase must not start until its required gate is approved.
 
 **Verify:** recoverable failure retries within budget; non-recoverable category escalates immediately.
 
-## L3-037 - Implement Structured Review Finding IDs
+## L3-037 - Implement Structured Review Finding IDs — DONE ✅ 2026-09-20
 
+**Status:** PASS — src/findings.ts emit/transition/get/list (FIX-### stable, open->fixed->closed, history audit retained) + migration v5 review_findings + test/findings.test.ts 5/5; typecheck 0, lint 0, npm test 163/163 pass
 **Owner:** CHEAP_WORKER  
 **Depends:** L3-023, GATE-03  
 **Covers:** SRC-039; AC-036
@@ -599,8 +617,9 @@ A later phase must not start until its required gate is approved.
 
 **Verify:** IDs stable; duplicate ID rejected; closed finding retains audit history.
 
-## L3-038 - Implement Review-Fix Handoff Loop
+## L3-038 - Implement Review-Fix Handoff Loop — DONE ✅ 2026-09-20
 
+**Status:** PASS — src/review-loop.ts sendToNeedsFix/returnFromFix on in_review->needs_fix->claimed via transitionTask + finding guards + test/review-loop.test.ts 4/4; typecheck 0, lint 0, npm test 167/167 pass
 **Owner:** CHEAP_WORKER  
 **Depends:** L3-036, L3-037  
 **Covers:** SRC-039; AC-037, AC-038
