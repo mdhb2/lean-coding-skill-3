@@ -160,8 +160,9 @@ A later phase must not start until its required gate is approved.
 
 **Decision:** APPROVE or REVISE each disputed row. Confirm complete skill-family boundary. No coding of skill family before approval.
 
-## L3-004 - Artifact Format Decision Memo
+## L3-004 - Artifact Format Decision Memo — DONE ✅ 2026-09-20
 
+**Status:** PASS — `docs/decisions/artifact-format-options.md` (161 lines) options/compatibility/collision/validator/recommendation Option C OKF-compatible + LCS3 extensions; no manifest/schema change  
 **Owner:** CHEAP_WORKER (proposal only)  
 **Depends:** none  
 **Covers:** SRC-013..SRC-016, SRC-019; PRD Open Question on artifact-format/OKF position
@@ -184,8 +185,9 @@ A later phase must not start until its required gate is approved.
 
 **Decision:** freeze format position and required base metadata before artifact-schema coding.
 
-## L3-005 - Draft Workflow Phase and Task Lifecycle Contract
+## L3-005 - Draft Workflow Phase and Task Lifecycle Contract — DONE ✅ 2026-09-20
 
+**Status:** PASS — `docs/decisions/lifecycle-contract-proposal.md` (237 lines) phase/state tables, transition matrix, illegal→terminal, review-fix loop, AFK/HITL gates; proposal only  
 **Owner:** CHEAP_WORKER (proposal only)  
 **Depends:** none  
 **Covers:** SRC-019, SRC-020..SRC-031, SRC-039, SRC-060
