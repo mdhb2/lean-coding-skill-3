@@ -1,0 +1,11 @@
+# Canonical — Quality Overlay definitions (SRC-047..SRC-051, FR-050..FR-052).
+# Selective loading only: never loaded globally. No external network dependency.
+schema_version: "1"
+overlays:
+  - name: ui-quality
+    scope: ui
+  - name: code-quality
+    scope: code
+  - name: security-basic
+    scope: security
+loading: selective

@@ -1,0 +1,66 @@
+# Canonical — skill registry (GATE-01 §6: exactly 18 skills).
+# Master routes over this, not hardcoded lists. Explicitly-NOT skills listed for guard.
+schema_version: "1"
+skills:
+  - name: lcs3-master
+    source: lcs-master
+    role: router
+  - name: lcs3-explore
+    source: lcs-explore
+    role: exploration
+  - name: lcs3-toprd
+    source: lcs-toprd
+    role: prd
+  - name: lcs3-prd-reviewer
+    source: lcs-prd-reviewer
+    role: review
+  - name: lcs3-tosrs
+    source: lcs-tosrs
+    role: srs
+  - name: lcs3-task-slicer
+    source: lcs-task-slicer
+    role: tasks
+  - name: lcs3-task-executor
+    source: lcs-task-executor
+    role: execution
+  - name: lcs3-code-review
+    source: lcs-code-review
+    role: review
+  - name: lcs3-debug
+    source: lcs-debug
+    modes: [normal, report-only]
+    role: debug
+  - name: lcs3-doc-finalizer
+    source: lcs-doc-finalizer
+    role: finalization
+  - name: lcs3-codebase-doc
+    source: lcs-codebase-doc
+    modes: [deep-map, onboarding]
+    role: docs
+  - name: lcs3-domain-modeling
+    source: lcs-domain-modeling
+    role: domain
+  - name: lcs3-improve-architecture
+    source: lcs-improve-architecture
+    role: architecture
+  - name: lcs3-research
+    source: lcs-research
+    role: research
+  - name: lcs3-prototype
+    source: lcs-prototype
+    role: prototype
+  - name: lcs3-wayfinder
+    source: lcs-wayfinder
+    role: planning
+  - name: lcs3-self-improvement
+    source: lcs-self-improvement
+    role: governance
+  - name: lcs3-wizard
+    source: lcs-wizard
+    role: hitl
+explicitly_not_skills:
+  - lcs3-chain-of-truth
+  - lcs3-debug-ext
+  - lcs3-new
+  - lcs3-onboarding
+  - lcs3-shared

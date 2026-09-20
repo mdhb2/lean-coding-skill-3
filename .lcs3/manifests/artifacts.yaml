@@ -1,0 +1,59 @@
+# Canonical — artifact type registry (GATE-02 Option C: format_version okf/0.2).
+# Sole source for VALID_ARTIFACT_TYPES. No skill invents a type without an entry here.
+schema_version: "1"
+format_version: "okf/0.2"
+artifact_types:
+  - name: prd
+    authority: canonical
+    cot_level: standard
+  - name: prd_enhanced
+    authority: canonical
+    cot_level: strict
+  - name: srs
+    authority: canonical
+    cot_level: strict
+  - name: tests
+    authority: canonical
+    cot_level: strict
+  - name: api
+    authority: canonical
+    cot_level: strict
+  - name: db
+    authority: canonical
+    cot_level: strict
+  - name: traceability
+    authority: derived
+    cot_level: strict
+  - name: task_coverage
+    authority: derived
+    cot_level: strict
+  - name: task
+    authority: canonical
+    cot_level: very_strict
+  - name: state
+    authority: canonical
+    cot_level: standard
+  - name: final_doc
+    authority: canonical
+    cot_level: strict
+  - name: final_map
+    authority: canonical
+    cot_level: strict
+  - name: index
+    authority: canonical
+    cot_level: standard
+  - name: explore
+    authority: canonical
+    cot_level: standard
+  - name: debug
+    authority: canonical
+    cot_level: standard
+  - name: code_review
+    authority: canonical
+    cot_level: strict
+  - name: wayfinder
+    authority: canonical
+    cot_level: standard
+# Required frontmatter per artifact (GATE-02 §5). `type` forbidden except `state`.
+required_fields: [title, format_version, authors, created, updated, artifact_type, source, cot_level]
+recommended_fields: [tags, summary, status, related]

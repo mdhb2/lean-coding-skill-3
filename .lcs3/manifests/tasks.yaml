@@ -1,0 +1,7 @@
+# Canonical — task schema (FR-019..FR-023). Only approved keys.
+schema_version: "1"
+task_fields:
+  required: [name, mode]
+  optional: [blocked_by, scope, overlays, covers, tests]
+modes: [AFK, HITL]
+scope_fields: [read, write, expansion]

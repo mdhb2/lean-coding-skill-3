@@ -1,0 +1,62 @@
+# Canonical — lifecycle contracts (GATE-03 freeze). Sole owner of the 3 state machines.
+# `status` (artifact) vs `task_status` (execution) never share an enum.
+schema_version: "1"
+artifact_status:
+  field: status
+  states: [draft, reviewed, active, archived]
+  terminal: [archived]
+  transitions:
+    - { from: draft, to: reviewed }
+    - { from: draft, to: active }
+    - { from: reviewed, to: draft }
+    - { from: reviewed, to: active }
+    - { from: active, to: archived }
+task_status:
+  field: task_status
+  states: [pending, ready, blocked, claimed, in_progress, in_review, needs_fix, done, cancelled, expired]
+  terminal: [done, cancelled]
+  transitions:
+    - { from: pending, to: ready }
+    - { from: pending, to: blocked }
+    - { from: pending, to: cancelled }
+    - { from: ready, to: blocked }
+    - { from: ready, to: claimed }
+    - { from: ready, to: cancelled }
+    - { from: blocked, to: pending }
+    - { from: blocked, to: ready }
+    - { from: blocked, to: cancelled }
+    - { from: claimed, to: in_progress }
+    - { from: claimed, to: expired }
+    - { from: claimed, to: cancelled }
+    - { from: in_progress, to: blocked }
+    - { from: in_progress, to: in_review }
+    - { from: in_progress, to: expired }
+    - { from: in_progress, to: cancelled }
+    - { from: in_review, to: needs_fix }
+    - { from: in_review, to: done }
+    - { from: in_review, to: cancelled }
+    - { from: needs_fix, to: claimed }
+    - { from: needs_fix, to: cancelled }
+    - { from: expired, to: ready }
+    - { from: expired, to: cancelled }
+work_item_status:
+  field: status
+  states: [open, paused, archived, finalized]
+  terminal: [archived, finalized]
+  transitions:
+    - { from: open, to: paused }
+    - { from: open, to: archived }
+    - { from: paused, to: open }
+    - { from: paused, to: archived }
+    - { from: archived, to: finalized }
+workflow_phases:
+  - idle
+  - new
+  - explore
+  - prd
+  - prd_review
+  - srs
+  - tasks
+  - execution
+  - code_review
+  - finalization
