@@ -344,8 +344,9 @@ A later phase must not start until its required gate is approved.
 
 **Verify:** empty DB initializes; repeated bootstrap is safe; schema version mismatch handled explicitly.
 
-## L3-015 - Implement Transactional Runtime State Repository
+## L3-015 - Implement Transactional Runtime State Repository — DONE ✅ 2026-09-20
 
+**Status:** PASS — `src/state.ts` (getTask/putTask/listTasks/withTransaction, BEGIN IMMEDIATE + COMMIT/ROLLBACK) + `src/db.ts` SCHEMA_VERSION 2 (runtime-tasks-table: tasks + idx_tasks_status) + `test/state.test.ts` 8/8; full suite 56/56 pass, typecheck/lint clean
 **Owner:** CHEAP_WORKER  
 **Depends:** L3-014  
 **Covers:** SRC-017, SRC-018, SRC-024

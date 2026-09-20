@@ -20,10 +20,11 @@ export interface BootstrapResult {
   errors: DbError[];
 }
 
-export const SCHEMA_VERSION = 1;
+export const SCHEMA_VERSION = 2;
 export const STATE_DB_REL = ".lcs3/state.db";
 
-// ponytail: v1 holds only bookkeeping; business tables land with L3-015+ as new migrations.
+// ponytail: migrations append-only; repair/normalize helpers stay out unless a
+// Smart Gate approves the recovery semantics (GATE-04 invariant 6).
 const MIGRATIONS: Migration[] = [
   {
     version: 1,
@@ -33,6 +34,19 @@ const MIGRATIONS: Migration[] = [
       name TEXT NOT NULL,
       applied_at TEXT NOT NULL
     );`,
+  },
+  {
+    version: 2,
+    name: "runtime-tasks-table",
+    sql: `CREATE TABLE IF NOT EXISTS tasks (
+      task_id TEXT PRIMARY KEY,
+      task_status TEXT NOT NULL,
+      owner TEXT,
+      lease_until INTEGER,
+      heartbeat_at INTEGER,
+      updated_at TEXT NOT NULL
+    );
+    CREATE INDEX IF NOT EXISTS idx_tasks_status ON tasks(task_status);`,
   },
 ];
 
