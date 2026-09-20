@@ -377,7 +377,9 @@ A later phase must not start until its required gate is approved.
 
 **Verify:** concurrent claim race yields one winner; expired lease can be reclaimed; stale owner cannot renew after ownership changes.
 
-## L3-018 - Implement Dependency Resolver
+## L3-018 - Implement Dependency Resolver — DONE ✅ 2026-09-20
+
+**Status:** PASS — `src/dependencies.ts` (normalize/check/assert) + `test/dependencies.test.ts` 8/8 (ready, blocked, unknown-dep, unknown-task, normalize, self-cycle, dupe); full suite 79/79 pass, typecheck/lint clean
 
 **Owner:** CHEAP_WORKER  
 **Depends:** L3-010, L3-015  
