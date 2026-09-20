@@ -303,8 +303,9 @@ A later phase must not start until its required gate is approved.
 
 **Verify:** valid config loads; unknown/invalid critical fields report actionable errors.
 
-## L3-012 - Implement `lcs3 init`
+## L3-012 - Implement `lcs3 init` — DONE ✅ 2026-09-20
 
+**Status:** PASS — `src/init.ts` initProject + `test/init.test.ts` 6/6; full suite 35/35 pass, typecheck/lint clean
 **Owner:** CHEAP_WORKER  
 **Depends:** L3-007, L3-011, GATE-04  
 **Covers:** SRC-003, SRC-041, SRC-046; AC-001..AC-003, AC-039
