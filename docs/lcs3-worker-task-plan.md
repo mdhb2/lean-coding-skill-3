@@ -290,8 +290,9 @@ A later phase must not start until its required gate is approved.
 
 **Verify:** canonical/derived classification, ID, relations, lifecycle fields validated; malformed frontmatter fails deterministically.
 
-## L3-011 - Implement Project Config Schema and Loader
+## L3-011 - Implement Project Config Schema and Loader — DONE ✅ 2026-09-20
 
+**Status:** PASS — `src/config.ts` (validateConfig/loadProjectConfig 6 groups FR-006) + `test/config.test.ts` 11/11 + `.lcs3/config.yaml` canonical; full suite 29/29 pass, typecheck/lint clean
 **Owner:** CHEAP_WORKER  
 **Depends:** L3-009, GATE-04  
 **Covers:** SRC-063

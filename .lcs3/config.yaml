@@ -1,0 +1,26 @@
+# Canonical — centralized project policy (SRC-063, FR-006).
+# Only the six approved groups; unknown groups/keys fail validation.
+schema_version: "1"
+workflow:
+  routing: complexity_risk
+  default_mode: AFK
+  bug_fast_lane: true
+execution:
+  max_retries: 3
+  lease_seconds: 600
+  failure_taxonomy: [implementation, specification, environment, external_dependency, credentials, test_instability, repository_conflict, human_decision]
+context:
+  selective: true
+  soft_budget_tokens: 8000
+  hard_budget_tokens: 32000
+verification:
+  task_gate: targeted
+  workitem_gate: broad
+  reuse_recipes: true
+quality:
+  overlays: [ui-quality, code-quality, security-basic]
+  loading: selective
+risk:
+  max_files: 6
+  max_loc: 400
+  on_exceed: escalate_or_reslice
