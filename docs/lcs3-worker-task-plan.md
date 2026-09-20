@@ -331,8 +331,9 @@ A later phase must not start until its required gate is approved.
 
 # Phase 2 - SQLite Runtime State and Concurrency
 
-## L3-014 - Implement SQLite Bootstrap and Schema Migration Layer
+## L3-014 - Implement SQLite Bootstrap and Schema Migration Layer — DONE ✅ 2026-09-20
 
+**Status:** PASS — `src/db.ts` (bootstrapDatabase + SCHEMA_VERSION 1 + schema_migrations bookkeeping, newer-version refusal, failed-migration rollback) + `test/db.test.ts` 7/7; full suite 48/48 pass, typecheck/lint clean
 **Owner:** CHEAP_WORKER  
 **Depends:** GATE-03, GATE-04, L3-007  
 **Covers:** SRC-017, SRC-018
