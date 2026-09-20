@@ -389,8 +389,9 @@ A later phase must not start until its required gate is approved.
 
 **Verify:** complete dependency passes; incomplete blocks; unknown dependency errors; cycle detection if approved by design.
 
-## L3-019 - Implement Conflict and Write-Scope Resolver
+## L3-019 - Implement Conflict and Write-Scope Resolver — DONE ✅ 2026-09-20
 
+**Status:** PASS — `src/conflicts.ts` (setTaskScope/getTaskScope/checkConflicts/assertNoConflicts/recordExpansion + task_scopes mirror) + `src/db.ts` SCHEMA_VERSION 3 (runtime-task-scopes-table) + `test/conflicts.test.ts` 8/8 (overlap, disjoint, read-only, terminal-history, expansion, no-op-covered, normalize, unknown-task); full suite 87/87 pass, typecheck/lint clean
 **Owner:** CHEAP_WORKER  
 **Depends:** L3-010, L3-015  
 **Covers:** SRC-025..SRC-027; AC-026, AC-027

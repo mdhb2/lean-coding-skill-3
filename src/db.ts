@@ -20,7 +20,7 @@ export interface BootstrapResult {
   errors: DbError[];
 }
 
-export const SCHEMA_VERSION = 2;
+export const SCHEMA_VERSION = 3;
 export const STATE_DB_REL = ".lcs3/state.db";
 
 // ponytail: migrations append-only; repair/normalize helpers stay out unless a
@@ -47,6 +47,17 @@ const MIGRATIONS: Migration[] = [
       updated_at TEXT NOT NULL
     );
     CREATE INDEX IF NOT EXISTS idx_tasks_status ON tasks(task_status);`,
+  },
+  {
+    version: 3,
+    name: "runtime-task-scopes-table",
+    sql: `CREATE TABLE IF NOT EXISTS task_scopes (
+      task_id TEXT PRIMARY KEY,
+      read_scope TEXT NOT NULL,
+      write_scope TEXT NOT NULL,
+      expansions TEXT NOT NULL,
+      updated_at TEXT NOT NULL
+    );`,
   },
 ];
 
