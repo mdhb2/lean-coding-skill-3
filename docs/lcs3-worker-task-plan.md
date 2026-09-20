@@ -227,12 +227,12 @@ A later phase must not start until its required gate is approved.
 
 **Verify:** every planned data type has exactly one authority class; `.lcs/` is never runtime input.
 
-## GATE-04 - Approve `.lcs3/` Storage Boundary
+## GATE-04 - Approve `.lcs3/` Storage Boundary — APPROVED ✅ 2026-09-20
 
 **Owner:** SMART_GATE  
 **Depends:** L3-006
 
-**Decision:** approve canonical/runtime/derived/reference boundaries before persistence/init coding.
+**Decision:** APPROVED as-is per `docs/architecture/storage-boundary-proposal.md`. Tree + 16-row authority table + 6 invariants frozen before persistence/init coding.
 
 ---
 
