@@ -152,13 +152,13 @@ A later phase must not start until its required gate is approved.
 
 **Escalate:** behavior conflicts with PRD, unclear merge target, or product behavior would be dropped.
 
-## GATE-01 - Approve Legacy Skill Migration Matrix
+## GATE-01 - Approve Legacy Skill Migration Matrix — APPROVED ✅ 2026-09-20
 
 **Owner:** SMART_GATE  
 **Depends:** L3-003  
 **Covers:** SRC-067..SRC-069; AC-061..AC-064
 
-**Decision:** APPROVE or REVISE each disputed row. Confirm complete skill-family boundary. No coding of skill family before approval.
+**Decision:** APPROVED as-is by product owner. 23 legacy skills (REWRITE 18 / MERGE 3 / REPLACED_BY_RUNTIME 2 / DROP 0) accepted from `docs/migration/legacy-skill-matrix.md`. Skill-family boundary confirmed.
 
 ## L3-004 - Artifact Format Decision Memo — DONE ✅ 2026-09-20
 
@@ -178,12 +178,12 @@ A later phase must not start until its required gate is approved.
 
 **Verify:** memo explicitly addresses `type`, artifact status, task status, lifecycle separation, frontmatter requirements, and canonical/derived marking.
 
-## GATE-02 - Approve Artifact Format Position
+## GATE-02 - Approve Artifact Format Position — APPROVED ✅ 2026-09-20
 
 **Owner:** SMART_GATE  
 **Depends:** L3-004
 
-**Decision:** freeze format position and required base metadata before artifact-schema coding.
+**Decision:** APPROVED Option C — OKF-compatible core (`format_version: "okf/0.2"`) + LCS3 extensions (`artifact_type`, `cot_level`, `source`), per `docs/decisions/artifact-format-options.md` §5/§9. `artifact_type` sole canonical discriminator, `type` forbidden except `state` artifact, `status` (artifact lifecycle) split from `task_status` (execution). Frozen before artifact-schema coding.
 
 ## L3-005 - Draft Workflow Phase and Task Lifecycle Contract — DONE ✅ 2026-09-20
 
@@ -202,12 +202,12 @@ A later phase must not start until its required gate is approved.
 
 **Verify:** every state has defined entry/exit rules; task and artifact status are separate; review-fix loop closes.
 
-## GATE-03 - Approve Workflow/Task Lifecycle Contract
+## GATE-03 - Approve Workflow/Task Lifecycle Contract — APPROVED ✅ 2026-09-20
 
 **Owner:** SMART_GATE  
 **Depends:** L3-005
 
-**Decision:** freeze lifecycle enums and transition semantics used by manifests/runtime/tests.
+**Decision:** APPROVED as-is per `docs/decisions/lifecycle-contract-proposal.md`. Three orthogonal state machines frozen: artifact `status` (4 states), task `task_status` (9+cancelled), work-item `status` (4 states) + `phase`. Transition matrix, illegal transitions, terminal states, review-fix loop, AFK/HITL entry/exit rules all frozen for manifest/runtime/test implementation.
 
 ## L3-006 - Draft `.lcs3/` Storage Boundary
 
