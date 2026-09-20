@@ -38,7 +38,7 @@ describe("SQLite bootstrap (SRC-017/018)", () => {
     const res = bootstrapDatabase(dbPath);
     assert.deepEqual(res.errors, []);
     assert.equal(res.version, SCHEMA_VERSION);
-    assert.deepEqual(res.applied, ["base-schema-migrations", "runtime-tasks-table", "runtime-task-scopes-table"]);
+    assert.deepEqual(res.applied, ["base-schema-migrations", "runtime-tasks-table", "runtime-task-scopes-table", "runtime-task-retries-table"]);
     assert.equal(res.created, true);
     assert.ok(existsSync(dbPath));
     assert.equal(versionOf(dbPath), SCHEMA_VERSION);

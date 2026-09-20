@@ -414,8 +414,9 @@ A later phase must not start until its required gate is approved.
 
 **Verify:** below-budget continues; above-budget emits expected escalation signal.
 
-## L3-021 - Implement Failure Taxonomy and Retry State
+## L3-021 - Implement Failure Taxonomy and Retry State — DONE ✅ 2026-09-20
 
+**Status:** PASS — `src/retries.ts` (classifyFailure/recordFailure/getRetryState: 8 approved categories, RETRYABLE bounded by execution.max_retries, NEVER_RETRY + BLOCKING escalate) + `src/db.ts` SCHEMA_VERSION 4 (runtime-task-retries-table) + `test/retries.test.ts` 7/7; full suite 100/100 pass, typecheck/lint clean
 **Owner:** CHEAP_WORKER  
 **Depends:** L3-016  
 **Covers:** SRC-021..SRC-023; AC-020..AC-023

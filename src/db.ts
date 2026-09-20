@@ -20,7 +20,7 @@ export interface BootstrapResult {
   errors: DbError[];
 }
 
-export const SCHEMA_VERSION = 3;
+export const SCHEMA_VERSION = 4;
 export const STATE_DB_REL = ".lcs3/state.db";
 
 // ponytail: migrations append-only; repair/normalize helpers stay out unless a
@@ -56,6 +56,20 @@ const MIGRATIONS: Migration[] = [
       read_scope TEXT NOT NULL,
       write_scope TEXT NOT NULL,
       expansions TEXT NOT NULL,
+      updated_at TEXT NOT NULL
+    );`,
+  },
+  {
+    version: 4,
+    name: "runtime-task-retries-table",
+    sql: `CREATE TABLE IF NOT EXISTS task_retries (
+      task_id TEXT PRIMARY KEY,
+      attempts INTEGER NOT NULL,
+      last_category TEXT NOT NULL,
+      disposition TEXT NOT NULL,
+      hitl INTEGER NOT NULL,
+      suggested_next TEXT NOT NULL,
+      reason TEXT NOT NULL,
       updated_at TEXT NOT NULL
     );`,
   },
