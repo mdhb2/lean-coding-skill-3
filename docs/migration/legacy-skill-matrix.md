@@ -1,7 +1,7 @@
 ---
 title: "LCS3 Legacy Skill Migration Matrix"
 artifact_type: legacy-skill-migration-matrix
-status: proposed
+status: approved
 created: "2026-09-20"
 updated: "2026-09-20"
 legacy_repository: "mdhb2/lean-coding-skills"
@@ -236,7 +236,7 @@ A smart reviewer/HITL should mark this artifact `approved` only if all checks pa
 
 ## 12. Approval Record
 
-Current status: **PROPOSED — NOT YET APPROVED**
+Current status: **APPROVED — GATE-01 2026-09-20**
 
 Approval authority: project owner / designated SMART_GATE.
 
@@ -247,9 +247,9 @@ On approval:
 3. treat Section 6 as the authoritative initial LCS3 skill inventory for SRS/task slicing;
 4. any later inventory change must update this artifact explicitly and record the rationale.
 
-Approval date: _pending_  
-Approved by: _pending_  
-Notes: _pending_
+Approval date: 2026-09-20
+Approved by: product owner (SMART_GATE GATE-01)
+Notes: Approved as-is — 23 legacy skills REWRITE 18 / MERGE 3 / REPLACED_BY_RUNTIME 2 / DROP 0. Section 6 authoritative initial LCS3 skill inventory.
 
 ## 13. Traceability Summary
 
