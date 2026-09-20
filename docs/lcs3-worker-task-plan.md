@@ -209,8 +209,9 @@ A later phase must not start until its required gate is approved.
 
 **Decision:** APPROVED as-is per `docs/decisions/lifecycle-contract-proposal.md`. Three orthogonal state machines frozen: artifact `status` (4 states), task `task_status` (9+cancelled), work-item `status` (4 states) + `phase`. Transition matrix, illegal transitions, terminal states, review-fix loop, AFK/HITL entry/exit rules all frozen for manifest/runtime/test implementation.
 
-## L3-006 - Draft `.lcs3/` Storage Boundary
+## L3-006 - Draft `.lcs3/` Storage Boundary — DONE ✅ 2026-09-20
 
+**Status:** PASS — `docs/architecture/storage-boundary-proposal.md` (126 lines) tree + 16-row authority table, one class per type, `.lcs/` never input; proposal only
 **Owner:** CHEAP_WORKER (proposal only)  
 **Depends:** GATE-02, GATE-03  
 **Covers:** SRC-003, SRC-013, SRC-017, SRC-018, SRC-034, SRC-041, SRC-046, SRC-063
