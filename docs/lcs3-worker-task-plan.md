@@ -400,7 +400,9 @@ A later phase must not start until its required gate is approved.
 
 **Verify:** overlapping write scopes conflict; read-only overlap does not; scope expansion produces explicit runtime record.
 
-## L3-020 - Implement Blast-Radius Budget Tracking
+## L3-020 - Implement Blast-Radius Budget Tracking — DONE ✅ 2026-09-20
+
+**Status:** PASS — `src/blast.ts` pure signal module + `test/blast.test.ts` 6 tests (below/at-budget continue, over-budget escalation signal, policy signals, invalid inputs); 93/93 pass, typecheck/lint clean; proposal only
 
 **Owner:** CHEAP_WORKER  
 **Depends:** L3-019  
