@@ -425,7 +425,9 @@ A later phase must not start until its required gate is approved.
 
 **Verify:** categories route to expected next state; retry budget exhausts deterministically; human/credential/spec ambiguity never loops as implementation retry.
 
-## L3-022 - Runtime Concurrency Regression Tests
+## L3-022 - Runtime Concurrency Regression Tests — DONE ✅ 2026-09-20
+
+**Status:** PASS — `test/concurrency.test.ts` 7/7 through public seams (parallel-claim one winner ×3 repeats, lease-expiry handoff + stale-owner refusal ×2, dependency gate blocks-until-done + unknown-dep throw, write-conflict blocks/clears-on-done/expansion-widens + read-only never conflicts, retry budget retry×3→escalate deterministic ×2 + status untouched, blast signal pure + tasks table untouched, end-to-end A→B→C handoff); full suite 107/107 pass, typecheck/lint clean
 
 **Owner:** CHEAP_WORKER  
 **Depends:** L3-017..L3-021  
