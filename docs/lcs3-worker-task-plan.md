@@ -266,8 +266,9 @@ A later phase must not start until its required gate is approved.
 
 **Verify:** all required concern manifests exist and are parseable; no duplicate lifecycle definition outside approved source.
 
-## L3-009 - Implement Manifest Schema Validation
+## L3-009 - Implement Manifest Schema Validation — DONE ✅ 2026-09-20
 
+**Status:** PASS — `src/manifests.ts` + `test/manifests.test.ts` 7/7 (valid pass, 5 failure fixtures), lint clean
 **Owner:** CHEAP_WORKER  
 **Depends:** L3-008  
 **Covers:** SRC-009, SRC-010; AC-004..AC-006
