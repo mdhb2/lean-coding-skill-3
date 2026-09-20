@@ -366,8 +366,9 @@ A later phase must not start until its required gate is approved.
 
 **Verify:** every legal transition passes; representative illegal transitions fail; terminal-state mutation is blocked unless contract explicitly permits it.
 
-## L3-017 - Implement Atomic Task Claim and Lease
+## L3-017 - Implement Atomic Task Claim and Lease — DONE ✅ 2026-09-20
 
+**Status:** PASS — `src/claims.ts` (claimTask/renewLease/expireTask/reclaimTask/isLeaseExpired) + `test/claims.test.ts` 8/8; full suite 71/71 pass, typecheck/lint clean
 **Owner:** CHEAP_WORKER  
 **Depends:** L3-015, GATE-03  
 **Covers:** SRC-024; AC-012, AC-013
