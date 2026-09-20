@@ -99,10 +99,11 @@ A later phase must not start until its required gate is approved.
 
 **Escalate:** licensing/provenance ambiguity or inability to expose reference read-only.
 
-## L3-002 - Inventory Every Legacy Skill
+## L3-002 - Inventory Every Legacy Skill — DONE ✅ 2026-09-20
 
+**Status:** PASS — `docs/migration/legacy-skill-inventory.md` 23 rows, `find ... | wc -l`==23 verified
 **Owner:** CHEAP_WORKER  
-**Depends:** L3-001  
+**Depends:** L3-001 — DONE  
 **Covers:** SRC-067, SRC-068, SRC-069; AC-061, AC-062
 
 **Goal:** produce a factual inventory of every legacy skill at the pinned revision without deciding its LCS3 disposition.
@@ -119,8 +120,9 @@ A later phase must not start until its required gate is approved.
 
 **Escalate:** duplicate/ambiguous skill identity or hidden generated skills not represented by normal entrypoints.
 
-## L3-003 - Draft Legacy Skill Migration Matrix
+## L3-003 - Draft Legacy Skill Migration Matrix — DONE ✅ 2026-09-20
 
+**Status:** PASS — `docs/migration/legacy-skill-matrix.md` 23 MIG rows, 23/23 inventory ↔ matrix 1:1, dispositions REWRITE 18 / MERGE 3 / REPLACED_BY_RUNTIME 2 / DROP 0, no blank, every row SRC-traced
 **Owner:** CHEAP_WORKER (proposal only)  
 **Depends:** L3-002  
 **Covers:** SRC-067, SRC-068, SRC-069; AC-061..AC-064
