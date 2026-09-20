@@ -75,8 +75,9 @@ A later phase must not start until its required gate is approved.
 
 # Phase 0 - Pre-SRS / Decision Preparation
 
-## L3-001 - Pin Legacy Reference Revision
+## L3-001 - Pin Legacy Reference Revision — DONE ✅ 2026-09-20
 
+**Status:** PASS — `reference/README.md` pins source `https://github.com/mdhb2/lean-coding-skills` @ `f35dd26` (2026-09-17), vendored snapshot `reference/legacy-lcs/` (137 tracked files, no `.git`, no `.gitmodules`, no merged history); root has no `package.json`/`tsconfig.json` so reference is not build input
 **Owner:** CHEAP_WORKER  
 **Depends:** none  
 **Covers:** SRC-041, SRC-042, SRC-043, SRC-066; AC-039, AC-060, AC-065
