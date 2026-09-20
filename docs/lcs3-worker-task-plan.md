@@ -279,8 +279,9 @@ A later phase must not start until its required gate is approved.
 
 **Verify:** valid fixture passes; malformed enum, duplicate ID, missing required field, and contradictory lifecycle fixture fail.
 
-## L3-010 - Implement Artifact Metadata Parser/Validator
+## L3-010 - Implement Artifact Metadata Parser/Validator — DONE ✅ 2026-09-20
 
+**Status:** PASS — `src/artifacts.ts` (parseArtifact frontmatter/body split + validateArtifactContent frontmatter-only rules + getArtifactAuthority AC-009) + `test/artifacts.test.ts` 11/11; full suite 18/18 pass, typecheck/lint clean
 **Owner:** CHEAP_WORKER  
 **Depends:** GATE-02, L3-009  
 **Covers:** SRC-013..SRC-016, SRC-019; AC-007..AC-010, AC-014
