@@ -1,28 +1,26 @@
 ---
-title: "GATE-05 Runtime Public Contract Freeze — Proposal"
+title: "GATE-05 Runtime Public Contract Freeze — Approved"
 format_version: "okf/0.2"
 authors:
   - type: agent
     name: "lcs3-worker"
 created: "2026-09-20"
-updated: "2026-09-20"
+updated: "2026-09-23"
 artifact_type: analysis
 cot_level: standard
-version: "1.0"
-status: draft
+version: "1.1"
+status: approved
 tags: [decision, runtime-contract, freeze, lcs3]
 summary: "Frozen public function surface per module, storage boundary, schema version, manifest/config anchors. No raw DB mechanics in skill contracts."
 source: "docs/prd.md"
 related: ["docs/decisions/lifecycle-contract-proposal.md", "docs/architecture/storage-boundary-proposal.md"]
 ---
 
-# GATE-05 — Runtime Public Contract Freeze (Proposal)
+# GATE-05 — Runtime Public Contract Freeze (Approved 2026-09-23)
 
-**Status:** proposal — requires SMART_GATE freeze before broad skill-family implementation (Phase 6)
+**Status:** APPROVED 2026-09-23 by owner decision (packet 1A+2A+3A+4A) — retro-approval of the 2026-09-20 proposal; requires no further SMART_GATE freeze before broad skill-family implementation (Phase 6)
 **Depends:** L3-012, L3-016..L3-038
-**Verification at proposal time:** `typecheck` 0 errors, `lint` 0 errors, `npm test` 167/167 pass
-
-Proposal only. No runtime code changes. Freezes what skills may call; internals stay free.
+**Verification at approval time:** `typecheck` 0 errors, `lint` 0 errors, `npm test` 284/284 pass
 
 ## 1. Boundary rule (frozen)
 

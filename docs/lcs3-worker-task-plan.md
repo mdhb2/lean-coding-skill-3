@@ -630,6 +630,7 @@ A later phase must not start until its required gate is approved.
 
 ## GATE-05 - Runtime Public Contract Freeze
 
+**Status:** APPROVED 2026-09-23 — `docs/decisions/runtime-contract-freeze.md` v1.1 (owner packet 1A+2A+3A+4A; verification: typecheck 0, lint 0, npm test 284/284 pass)
 **Owner:** SMART_GATE  
 **Depends:** L3-012, L3-016..L3-038
 
@@ -901,7 +902,7 @@ A later phase must not start until its required gate is approved.
 
 **Verify:** clean install in isolated fixture; `lcs3` CLI starts; skills discoverable by approved mechanism; no legacy runtime dependency bundled.
 
-**Status:** PARTIAL — proposal recorded (npm-only publish of `dist/` + `skills/` + `docs/`, no standalone binary; `npm i -g lcs3` + `lcs3 init` only after a real CLI lands) + `files` allowlist in `package.json` verified by `test/scenarios/packaging.test.ts` 5/5 over real `npm pack --dry-run` (tarball ships `dist/` + 18 `skills/lcs3-*/SKILL.md` matching `.lcs3/manifests/skills.yaml` exactly + `docs/`; excludes `reference/`, raw `src/*.ts`, `thoughts/`, `.lcs/`; only dependency `js-yaml`; known gap pinned: no `bin`, no executable CLI — `src/index.ts` is a placeholder); `typecheck` 0, `lint` 0. BLOCKED remainder (`lcs3` CLI starts) escalated to L3-060: no CLI exists to package.
+**Status:** DONE WITH EXCEPTION (owner packet 2A, 2026-09-23) — proposal recorded (npm-only publish of `dist/` + `skills/` + `docs/`, no standalone binary; `npm i -g lcs3` + `lcs3 init` only after a real CLI lands) + `files` allowlist in `package.json` verified by `test/scenarios/packaging.test.ts` 5/5 over real `npm pack --dry-run` (tarball ships `dist/` + 18 `skills/lcs3-*/SKILL.md` matching `.lcs3/manifests/skills.yaml` exactly + `docs/`; excludes `reference/`, raw `src/*.ts`, `thoughts/`, `.lcs/`; only dependency `js-yaml`; known gap pinned: no `bin`, no executable CLI — `src/index.ts` is a placeholder); `typecheck` 0, `lint` 0. Exception accepted by owner: executable `lcs3` CLI build deferred to Phase 5-7 follow-up work; packaging verification (tarball contents) stands as the done criterion for this task.
 
 ## L3-059 - Write Operator/Contributor Documentation
 
@@ -932,7 +933,7 @@ A later phase must not start until its required gate is approved.
 
 **Decision:** APPROVE RC / REVISE / BLOCK.
 
-**Status:** APPROVED RC by owner/HITL (2026-09-20) — evidence in `docs/release-evidence.md`; worker recommendation was BLOCK, owner overrode with accepted exceptions: (1) SRC-005 P0 primary CLI unresolved (no bin/argv; follow-up required before claiming CLI delivery), (2) GATE-05 freeze still draft (retro-approval pending), (3) `docs/ac-coverage.md` 'No gaps' line overstates AC-003/SRC-005 — correct on next pass, (4) Phase 5-7 files uncommitted (owner commit decision pending).
+**Status:** APPROVED RC by owner/HITL (2026-09-20) — evidence in `docs/release-evidence.md`; worker recommendation was BLOCK, owner overrode with accepted exceptions: (1) SRC-005 P0 primary CLI unresolved (no bin/argv; follow-up required before claiming CLI delivery), (2) GATE-05 freeze still draft (retro-approval pending — RESOLVED 2026-09-23: `docs/decisions/runtime-contract-freeze.md` v1.1 APPROVED, packet 1A+2A+3A+4A), (3) `docs/ac-coverage.md` 'No gaps' line overstates AC-003/SRC-005 — correct on next pass, (4) Phase 5-7 files uncommitted (owner commit decision pending).
 
 ---
 
