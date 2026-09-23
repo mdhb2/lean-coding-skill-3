@@ -159,8 +159,13 @@ export function renderAcCoverage(rootDir: string, result: AcCoverageResult = che
     lines.push(`| ${a.id} | ${a.srcs.join(", ")} | ${ev} |`);
   }
   lines.push("");
-  if (failures === 0) lines.push("No gaps — every AC has evidence or an explicitly approved exception, and every P0 SRC traces to tests/validation.");
-  else {
+  if (failures === 0) {
+    if (result.blocked.length === 0) {
+      lines.push("No gaps — every AC has evidence, and every P0 SRC traces to tests/validation.");
+    } else {
+      lines.push(`No gaps beyond explicitly approved exceptions (${result.blocked.map((b) => b.id).join(", ")}) — every other AC has evidence, and every P0 SRC traces to tests/validation.`);
+    }
+  } else {
     if (result.missingAc.length > 0) lines.push(`Missing ACs: ${result.missingAc.join(", ")}`);
     if (result.duplicateAc.length > 0) lines.push(`Duplicate ACs: ${result.duplicateAc.join(", ")}`);
     if (result.unevidencedAc.length > 0) lines.push(`Unevidenced ACs: ${result.unevidencedAc.join(", ")}`);

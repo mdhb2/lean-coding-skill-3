@@ -933,7 +933,7 @@ A later phase must not start until its required gate is approved.
 
 **Decision:** APPROVE RC / REVISE / BLOCK.
 
-**Status:** APPROVED RC by owner/HITL (2026-09-20) — evidence in `docs/release-evidence.md`; worker recommendation was BLOCK, owner overrode with accepted exceptions: (1) SRC-005 P0 primary CLI unresolved (no bin/argv; follow-up required before claiming CLI delivery), (2) GATE-05 freeze still draft (retro-approval pending — RESOLVED 2026-09-23: `docs/decisions/runtime-contract-freeze.md` v1.1 APPROVED, packet 1A+2A+3A+4A), (3) `docs/ac-coverage.md` 'No gaps' line overstates AC-003/SRC-005 — correct on next pass, (4) Phase 5-7 files uncommitted (owner commit decision pending).
+**Status:** APPROVED RC by owner/HITL (2026-09-20) — evidence in `docs/release-evidence.md`; worker recommendation was BLOCK, owner overrode with accepted exceptions: (1) SRC-005 P0 primary CLI unresolved (no bin/argv; follow-up required before claiming CLI delivery), (2) GATE-05 freeze still draft (retro-approval pending — RESOLVED 2026-09-23: `docs/decisions/runtime-contract-freeze.md` v1.1 APPROVED, packet 1A+2A+3A+4A), (3) `docs/ac-coverage.md` 'No gaps' line overstates AC-003/SRC-005 — RESOLVED 2026-09-23: footer now reads "No gaps beyond explicitly approved exceptions (AC-003)" via `renderAcCoverage`; regenerated doc; typecheck 0, lint 0, test 284/284, (4) Phase 5-7 files uncommitted — RESOLVED 2026-09-23: committed (9be4d4e GATE-05 packet + this AC-003 wording fix), working tree clean.
 
 ---
 

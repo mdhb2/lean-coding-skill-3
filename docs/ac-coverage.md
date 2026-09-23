@@ -70,4 +70,4 @@ Covered ACs: 65/65; P0 SRCs traced: 37/37; failures: 0
 | AC-064 | SRC-068 | docs/legacy-skill-matrix.md, docs/migration/skill-build-plan.md |
 | AC-065 | SRC-002, SRC-066 | test/scenarios/legacy.test.ts, docs/legacy-skill-matrix.md |
 
-No gaps — every AC has evidence or an explicitly approved exception, and every P0 SRC traces to tests/validation.
+No gaps beyond explicitly approved exceptions (AC-003) — every other AC has evidence, and every P0 SRC traces to tests/validation.

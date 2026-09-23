@@ -21,7 +21,9 @@ Every claim re-verified this task; commands and sources given.
   Fixed 2026-09-20 (owner item #4): AC-003 now carries an explicit BLOCKED exception in
   `src/ac-coverage.ts` (pinned by `test/scenarios/coverage.test.ts`), and regenerated
   `docs/ac-coverage.md` shows `BLOCKED: SRC-005 CLI half unevidenced...` with the footer
-  reading "evidence or an explicitly approved exception". The gap itself (no CLI) remains.
+  reading "No gaps beyond explicitly approved exceptions (AC-003)". The gap itself (no CLI) remains.
+  Footer wording fixed 2026-09-23 (`renderAcCoverage` names the blocked AC explicitly;
+  regenerated `docs/ac-coverage.md`; typecheck 0, lint 0, `npm test` 284/284).
 - L3-058 recorded this as PARTIAL with the remainder escalated here.
 
 ## 3. Mandatory Smart Gates — FAIL (1 open)
