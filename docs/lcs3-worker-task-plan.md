@@ -815,7 +815,7 @@ A later phase must not start until its required gate is approved.
 
 # Phase 7 - Scenario Evals, Packaging, and Release Gate
 
-## L3-051 - Build End-to-End Scenario Harness
+## L3-051 - Build End-to-End Scenario Harness — DONE ✅ 2026-09-23
 
 **Status:** PASS — `test/scenarios/helpers.ts` (freshScenarioProject/readyTask/doneTask over real initProject+bootstrapDatabase+canonical machine) + `test/scenarios/minimal.test.ts` 1/1 (init→ready→claimed→done via public seams, observable final state); `typecheck` 0, `lint` 0, `npm test` 237/237 pass
 **Owner:** CHEAP_WORKER  
@@ -826,7 +826,7 @@ A later phase must not start until its required gate is approved.
 
 **Verify:** one minimal scenario can initialize, mutate runtime state through public API, and assert observable final state.
 
-## L3-052 - Add Planning and Bug Workflow Scenarios
+## L3-052 - Add Planning and Bug Workflow Scenarios — DONE ✅ 2026-09-23
 
 **Status:** PASS — `test/scenarios/planning.test.ts` 4/4 (simple short vs complex full, risk-dominates, scoped-bug fast lane shorter-than-short + evidence, ambiguous-bug full escalation verbatim) via real routeWork/routeBug; `typecheck` 0, `lint` 0
 **Owner:** CHEAP_WORKER  
@@ -837,7 +837,7 @@ A later phase must not start until its required gate is approved.
 
 **Verify:** each route matches approved workflow manifest and preserves evidence.
 
-## L3-053 - Add AFK/HITL/Retry Scenarios
+## L3-053 - Add AFK/HITL/Retry Scenarios — DONE ✅ 2026-09-23
 
 **Status:** PASS — `test/scenarios/autonomy.test.ts` 4/4 (AFK routine continues, HITL destructive/credential/business stops with triggers, implementation retry×3→escalate, credential/spec immediate escalate never loops) via real evaluateAutonomy/recordFailure; `typecheck` 0, `lint` 0
 **Owner:** CHEAP_WORKER  
@@ -846,7 +846,7 @@ A later phase must not start until its required gate is approved.
 
 **Scenarios:** AFK success, meaningful HITL stop, recoverable retry, retry exhaustion, credential/spec ambiguity.
 
-## L3-054 - Add Multi-Workitem/Multi-Worker Scenarios
+## L3-054 - Add Multi-Workitem/Multi-Worker Scenarios — DONE ✅ 2026-09-23
 
 **Owner:** CHEAP_WORKER  
 **Depends:** L3-051  
@@ -856,7 +856,7 @@ A later phase must not start until its required gate is approved.
 
 **Status:** PASS — `test/scenarios/workers.test.ts` 5/5 (claim race exactly-one-wins, live-lease refuse-expire → expired → reclaim by new owner, dependency blocked→done→ready, write-conflict detect + expansion recorded, blast within-budget continue / over-budget escalate_or_reslice) via real claimTask/expireTask/reclaimTask/checkDependencies/setTaskScope/checkConflicts/recordExpansion/checkBlastRadius; `typecheck` 0, `lint` 0, `npm test` 250/250 pass
 
-## L3-055 - Add Review/Freshness/Finalization Scenarios
+## L3-055 - Add Review/Freshness/Finalization Scenarios — DONE ✅ 2026-09-23
 
 **Owner:** CHEAP_WORKER  
 **Depends:** L3-051  
@@ -866,7 +866,7 @@ A later phase must not start until its required gate is approved.
 
 **Status:** PASS — `test/scenarios/finalization.test.ts` 5/5 (review→FIX→review full loop with 3-entry finding trail, review-loop guards refuse open/wrong-task/non-in_review, stale capsule detected via upstream-changed + regeneration restores fresh, targeted pass vs final broader-suite fail/empty-blocked/stale-blocked, done terminal refuses exit) via real emitFinding/sendToNeedsFix/transitionFinding/returnFromFix/generateCapsule/checkDerivedFileFreshness/registerRecipe/runTargetedGate/runFinalGate; `typecheck` 0, `lint` 0, `npm test` 255/255 pass
 
-## L3-056 - Add Legacy Isolation and Leakage Scenarios
+## L3-056 - Add Legacy Isolation and Leakage Scenarios — DONE ✅ 2026-09-23
 
 **Owner:** CHEAP_WORKER  
 **Depends:** L3-047, L3-050, L3-051  
@@ -876,7 +876,7 @@ A later phase must not start until its required gate is approved.
 
 **Status:** PASS — `test/scenarios/legacy.test.ts` 5/5 over real importLegacyDoc/listLegacyImports/getLegacyImport/searchLegacyImports seams (coexist `.lcs/` inert + reference scope, byte-identical import + searchable snippet + get round-trip, `.lcs/`/non-Markdown/`.lcs3/` sources refused with eligibility errors and zero imports recorded, read-only source imports without mutation, repeat import idempotent single record); scenario file recovered under L3-057 sweep after file found missing; `typecheck` 0, `lint` 0, `npm test` 275/275 pass
 
-## L3-057 - Full Doctor and Acceptance Coverage Sweep
+## L3-057 - Full Doctor and Acceptance Coverage Sweep — DONE ✅ 2026-09-23
 
 **Owner:** CHEAP_WORKER  
 **Depends:** L3-052..L3-056  
@@ -890,7 +890,7 @@ A later phase must not start until its required gate is approved.
 
 **Status:** PASS — `src/ac-coverage.ts` (65-row AC-001..AC-065 table with SRC links + checkAcCoverage path-existence/P0-trace check + renderAcCoverage deterministic report) + `test/scenarios/doctor.test.ts` 10/10 (healthy clean, all 8 doctor codes fire, determinism) + `test/scenarios/coverage.test.ts` 5/5 (65/65 rows, zero unevidenced/missing-evidence, 37/37 P0 traced, report renders deterministically, generateTaskCoverage regenerates from canonical frontmatter as AC-010 evidence) + generated `docs/ac-coverage.md` (No gaps); sweep caught real gap — `test/scenarios/legacy.test.ts` missing — recovered 5/5 under this task; `typecheck` 0, `lint` 0, `npm test` 275/275 pass
 
-## L3-058 - Package CLI and Skill Distribution
+## L3-058 - Package CLI and Skill Distribution — DONE WITH EXCEPTION ✅ 2026-09-23
 
 **Owner:** CHEAP_WORKER  
 **Depends:** L3-057, approved packaging decision  
@@ -904,7 +904,7 @@ A later phase must not start until its required gate is approved.
 
 **Status:** DONE WITH EXCEPTION — 2026-09-23 follow-up adds local `bin` mapping `lcs3: ./dist/src/cli.js` and the approved scoped CLI (help/version, init, task list/create/transition/claim); `test/scenarios/cli.test.ts` 4/4 subprocess scenarios pass. `package.json` remains private; this does not authorize publication or global installation. `test/scenarios/packaging.test.ts` 5/5 and `npm pack --dry-run` verify the private tarball (374 files, includes CLI entry); raw source and legacy reference remain excluded. The original task's package-content criterion is verified; accepted scope limit: the other runtime operations listed in the approved CLI plan are not CLI commands. `npm run typecheck` and `npm run lint` pass.
 
-## L3-059 - Write Operator/Contributor Documentation
+## L3-059 - Write Operator/Contributor Documentation — DONE ✅ 2026-09-23
 
 **Owner:** CHEAP_WORKER  
 **Depends:** L3-057, L3-058  
