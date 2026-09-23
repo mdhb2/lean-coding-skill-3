@@ -933,7 +933,7 @@ A later phase must not start until its required gate is approved.
 
 **Decision:** APPROVE RC / REVISE / BLOCK.
 
-**Status:** APPROVED RC by owner/HITL (2026-09-20), with accepted exceptions recorded in `docs/release-evidence.md`. Follow-up evidence (2026-09-23) supersedes the relevant exception findings, but is not a new RC decision: (1) CLI exception has scoped implementation and subprocess evidence per approved CLI plan; remaining runtime module commands remain out of scope, (2) GATE-05 approval and (3) AC-003 namespace evidence are recorded in the release evidence and generated coverage report. The 2026-09-20 commit/clean-tree note is historical; this feature worktree has uncommitted changes, and no commit/release cut was requested. Latest verification: `npm test` 288/288 across 51 suites, `npm run typecheck`, `npm run lint`, `npm pack --dry-run` pass. This does not re-approve RC.
+**Status:** APPROVED RC by owner/HITL (2026-09-20), with accepted exceptions recorded in `docs/release-evidence.md`. Follow-up evidence (2026-09-23) supersedes the relevant exception findings, but is not a new RC decision: (1) CLI exception has scoped implementation and subprocess evidence per approved CLI plan; remaining runtime module commands remain out of scope, (2) GATE-05 approval and (3) AC-003 namespace evidence are recorded in the release evidence and generated coverage report. CLI follow-up was committed as `5ec2b75`; no release cut or new RC approval occurred. Latest verification: `npm test` 288/288 across 51 suites, `npm run typecheck`, `npm run lint`, `npm pack --dry-run` pass. This does not re-approve RC.
 
 ---
 

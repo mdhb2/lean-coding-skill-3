@@ -3,7 +3,7 @@
 ## Decision history
 
 - **2026-09-20:** owner/HITL approved RC with accepted exceptions after worker recommendation BLOCK. The accepted exceptions covered missing CLI, pending GATE-05 approval, AC-003 coverage wording, and uncommitted Phase 5-7 changes. This records that historical decision; this follow-up does not constitute a new RC approval.
-- **2026-09-23 follow-up:** CLI implementation and evidence below close the scoped CLI exception. GATE-05 approval and historical AC-003 footer correction remain documented in the worker plan. The current feature worktree is intentionally uncommitted; no commit or release cut was requested.
+- **2026-09-23 follow-up:** CLI implementation and evidence below close the scoped CLI exception. GATE-05 approval and historical AC-003 footer correction remain documented in the worker plan. CLI changes were committed as `5ec2b75`; no release cut or new RC approval occurred.
 
 ## CLI follow-up evidence (2026-09-23)
 
@@ -23,4 +23,4 @@
 - Focused CLI subprocess suite: **4/4 pass**. Operator-guide scenario: **3/3 pass**. Packaging scenario: **5/5 pass**.
 - `docs/ac-coverage.md` regenerated from `renderAcCoverage`; current sweep reports 65/65 ACs, 37/37 P0 SRCs traced, zero failures, zero blocked exceptions.
 
-These checks verify the scoped implementation and current repository evidence. They do not replace a new owner/HITL release decision or establish that the uncommitted feature worktree is a release artifact.
+These checks verify the scoped implementation and current repository evidence. They do not replace a new owner/HITL release decision or establish that commit `5ec2b75` is a release artifact.
