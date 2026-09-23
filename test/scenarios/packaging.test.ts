@@ -1,9 +1,8 @@
 // Packaging and skill-distribution contract (L3-058): the npm `files`
 // allowlist is the approved distribution boundary. Verified by running the
 // real `npm pack --dry-run` and asserting on its listing — no aspirational
-// install commands. There is deliberately no `bin` entry: no executable
-// `lcs3` CLI ships yet (src/index.ts is a placeholder), and the known-gap
-// test below pins that fact until a CLI lands.
+// install commands. The executable entry is a private local/package contract;
+// it does not authorize publishing while package.json remains private.
 import { describe, it } from "node:test";
 import assert from "node:assert/strict";
 import { execSync } from "node:child_process";
@@ -41,6 +40,7 @@ describe("packaging contract (L3-058, SRC-004..SRC-006, SRC-064)", () => {
       "skills/lcs3-wizard/SKILL.md",
       "docs/ac-coverage.md",
       "package.json",
+      "dist/src/cli.js",
     ]) {
       assert.ok(out.includes(entry), `tarball must contain ${entry}`);
     }
@@ -82,8 +82,9 @@ describe("packaging contract (L3-058, SRC-004..SRC-006, SRC-064)", () => {
     );
   });
 
-  it("known gap: no executable CLI ships (no bin entry)", () => {
+  it("declares executable CLI inside the private package boundary", () => {
     const pkg = readPackageJson();
-    assert.ok(!("bin" in pkg), "package.json must not claim a bin until a real CLI lands (L3-060 decision)");
+    assert.equal(pkg.private, true, "CLI wiring must not change package publication status");
+    assert.deepEqual(pkg.bin, { lcs3: "./dist/src/cli.js" });
   });
 });

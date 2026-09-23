@@ -6,7 +6,7 @@ Covered ACs: 65/65; P0 SRCs traced: 37/37; failures: 0
 |---|---|---|
 | AC-001 | SRC-003, SRC-046 | test/init.test.ts, test/scenarios/minimal.test.ts |
 | AC-002 | SRC-046, SRC-041 | test/init.test.ts, test/scenarios/legacy.test.ts |
-| AC-003 | SRC-004, SRC-005 | BLOCKED: SRC-005 CLI half unevidenced: no executable CLI exists (no bin entry, src/index.ts is a placeholder). Evidence covers the init/SRC-004 half only. Accepted exception per L3-060 RC approval 2026-09-20; see docs/release-evidence.md. |
+| AC-003 | SRC-004, SRC-005 | package.json, test/scenarios/cli.test.ts, test/scenarios/packaging.test.ts, test/init.test.ts |
 | AC-004 | SRC-009, SRC-010 | test/manifests.test.ts, test/drift.test.ts |
 | AC-005 | SRC-009, SRC-010 | test/drift.test.ts, test/manifests.test.ts |
 | AC-006 | SRC-010, SRC-019 | test/transitions.test.ts, test/artifacts.test.ts |
@@ -70,4 +70,4 @@ Covered ACs: 65/65; P0 SRCs traced: 37/37; failures: 0
 | AC-064 | SRC-068 | docs/legacy-skill-matrix.md, docs/migration/skill-build-plan.md |
 | AC-065 | SRC-002, SRC-066 | test/scenarios/legacy.test.ts, docs/legacy-skill-matrix.md |
 
-No gaps beyond explicitly approved exceptions (AC-003) — every other AC has evidence, and every P0 SRC traces to tests/validation.
+No gaps — every AC has evidence, and every P0 SRC traces to tests/validation.

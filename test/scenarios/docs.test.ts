@@ -1,6 +1,5 @@
-// Operator-guide accuracy net (L3-059): the guide must keep covering all 8
-// card topics, must pin the load-bearing facts, and must never grow a
-// runnable `lcs3 ...` CLI invocation while no executable CLI ships.
+// Operator-guide accuracy net (L3-059): the guide must cover all 8 card topics,
+// pin load-bearing facts, and document only shipped CLI behavior.
 import { describe, it } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
@@ -50,12 +49,11 @@ describe("operator guide accuracy (L3-059)", () => {
     }
   });
 
-  it("documents no aspirational CLI command as runnable", () => {
-    assert.ok(!/^\$\s+lcs3\s/m.test(GUIDE), "no shell-style lcs3 invocation may appear runnable");
+  it("documents the local private CLI without promising global installation", () => {
+    assert.match(GUIDE, /node dist\/src\/cli\.js/);
+    assert.match(GUIDE, /task transition/);
+    assert.match(GUIDE, /task claim/);
     assert.ok(!GUIDE.includes("npm i -g"), "no global-install command may be documented");
-    assert.ok(
-      GUIDE.includes("no executable CLI") || GUIDE.includes("No published package"),
-      "the no-CLI gap must be stated plainly",
-    );
+    assert.ok(GUIDE.includes("private package"), "private distribution boundary must be stated plainly");
   });
 });

@@ -2,19 +2,22 @@
 
 > Guardrail (L3-059): everything below describes **verified behavior** — commands
 > the author ran, APIs read from `src/`, and assertions covered by
-> `test/scenarios/`. Anything not yet true (notably: no executable CLI ships)
-> is stated as a gap, not documented as a command.
+> `test/scenarios/`. The CLI is executable from a checkout; package remains private.
 
 ## 1. Installation
 
-There is **no published package and no executable CLI** (`package.json` has no
-`bin` entry; `src/index.ts` is a placeholder). Install from a checkout:
+There is **no published package**. The private package defines local `lcs3` bin
+metadata, but does not support global installation. Run CLI from a checkout:
 
 - Requirement: **Node.js >= 22** (`engines` in `package.json`; verified here
   with `node v22.23.2`).
 - Runtime dependency: exactly one — `js-yaml`. Anything else in
   `dependencies` is a packaging violation (`test/scenarios/packaging.test.ts`).
 - Build: `npm run build` (`tsc -p tsconfig.json`, emits `dist/`).
+- CLI: `node dist/src/cli.js --help` or `node dist/src/cli.js --version`.
+  After `npm run build`, package managers can also resolve the local `lcs3` bin
+  from `node_modules/.bin/`; do not publish or globally install this private
+  package.
 - Verify: `npm test` (build + `node --test "dist/test/**/*.test.js"`),
   `npm run typecheck`, `npm run lint`. All three must be green before any
   task claims PASS.
@@ -24,9 +27,26 @@ There is **no published package and no executable CLI** (`package.json` has no
 
 ## 2. Project init
 
-Projects are initialized **programmatically** via `initProject(projectRoot)`
-(`src/init.ts`) — there is no working `lcs3 init` command (the string appears
-only inside one error message; treat it as future CLI surface).
+Projects initialize with `node dist/src/cli.js init [--project-root <path>]`
+or the local `lcs3 init` bin. Omitting `--project-root` uses current directory.
+The command calls `initProject(projectRoot)` (`src/init.ts`) and bootstraps
+project-local SQLite state. It emits JSON to stdout, diagnostics to stderr,
+and exits with `0` on success, `1` on runtime failure, or `2` on invalid usage.
+Initialization is required before task commands; task operations do not
+implicitly create project state.
+
+Supported task commands:
+
+```sh
+node dist/src/cli.js task list [--project-root <path>]
+node dist/src/cli.js task create <task-id> [--project-root <path>]
+node dist/src/cli.js task transition <task-id> <status> [--project-root <path>]
+node dist/src/cli.js task claim <task-id> --owner <worker-id> [--lease-seconds <seconds>] [--project-root <path>]
+```
+
+Each successful task command emits its result as JSON. `task create` creates a
+`pending` task; transitions are checked against `lifecycle.yaml`; claims require
+a `ready` task and default to configured `execution.lease_seconds` (600).
 
 `initProject` creates the approved `.lcs3/` layout and is **idempotent**:
 
@@ -142,7 +162,7 @@ A release fixture must be Doctor-clean (see L3-060).
    stays read-only.
 4. Verify before claiming done: `npm run typecheck` (0 errors), `npm run
    lint` (0 problems), targeted `node --test dist/test/...` for touched
-   areas, then full `npm test` (currently 283 tests). New behavior needs a
+   areas, then full `npm test`. New behavior needs a
    scenario test under `test/scenarios/` using `freshScenarioProject` /
    `readyTask` / `doneTask` helpers — Markdown shape checks are not sufficient.
 5. Update the task status line in `docs/lcs3-worker-task-plan.md` on PASS

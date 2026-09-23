@@ -902,7 +902,7 @@ A later phase must not start until its required gate is approved.
 
 **Verify:** clean install in isolated fixture; `lcs3` CLI starts; skills discoverable by approved mechanism; no legacy runtime dependency bundled.
 
-**Status:** DONE WITH EXCEPTION (owner packet 2A, 2026-09-23) — proposal recorded (npm-only publish of `dist/` + `skills/` + `docs/`, no standalone binary; `npm i -g lcs3` + `lcs3 init` only after a real CLI lands) + `files` allowlist in `package.json` verified by `test/scenarios/packaging.test.ts` 5/5 over real `npm pack --dry-run` (tarball ships `dist/` + 18 `skills/lcs3-*/SKILL.md` matching `.lcs3/manifests/skills.yaml` exactly + `docs/`; excludes `reference/`, raw `src/*.ts`, `thoughts/`, `.lcs/`; only dependency `js-yaml`; known gap pinned: no `bin`, no executable CLI — `src/index.ts` is a placeholder); `typecheck` 0, `lint` 0. Exception accepted by owner: executable `lcs3` CLI build deferred to Phase 5-7 follow-up work; packaging verification (tarball contents) stands as the done criterion for this task.
+**Status:** DONE WITH EXCEPTION — 2026-09-23 follow-up adds local `bin` mapping `lcs3: ./dist/src/cli.js` and the approved scoped CLI (help/version, init, task list/create/transition/claim); `test/scenarios/cli.test.ts` 4/4 subprocess scenarios pass. `package.json` remains private; this does not authorize publication or global installation. `test/scenarios/packaging.test.ts` 5/5 and `npm pack --dry-run` verify the private tarball (374 files, includes CLI entry); raw source and legacy reference remain excluded. The original task's package-content criterion is verified; accepted scope limit: the other runtime operations listed in the approved CLI plan are not CLI commands. `npm run typecheck` and `npm run lint` pass.
 
 ## L3-059 - Write Operator/Contributor Documentation
 
@@ -914,7 +914,7 @@ A later phase must not start until its required gate is approved.
 
 **Guardrail:** documentation must be derived from actual verified behavior, not aspirational commands.
 
-**Status:** PASS — `docs/operator-guide.md` (installation with no-CLI gap stated plainly, programmatic `initProject` + `.lcs3/` layout + defaults, canonical/SQLite/derived authority table, worker claim/lease/dependency/conflict/blast/AFK-HITL-retry/review-loop rules with real function names and guard strings, read-only legacy + `importLegacyDoc` eligibility, all 8 `doc-*` codes, recovery playbook, contribution workflow with ≤6-file/≤400-LOC budget) + `test/scenarios/docs.test.ts` 3/3 (all 8 topics present, load-bearing facts pinned incl. all 8 doctor codes from the real `DOCTOR_CODES`, no runnable `lcs3`/global-install command documented); every documented command was executed during writing; `typecheck` 0, `lint` 0, `npm test` 283/283 pass
+**Status:** PASS — `docs/operator-guide.md` documents checkout-local CLI usage, private package boundary, init/task commands, output and exit behavior, `.lcs3/` layout, and legacy-state isolation; retains authority model, worker rules, legacy import, Doctor, recovery, and contribution topics. `test/scenarios/docs.test.ts` 3/3 pins required topics, doctor codes, and no global-install claim. Full verification: `npm test` 288/288 across 51 suites; `npm run typecheck` and `npm run lint` pass.
 
 ## L3-060 - Release Candidate Gate
 
@@ -933,7 +933,7 @@ A later phase must not start until its required gate is approved.
 
 **Decision:** APPROVE RC / REVISE / BLOCK.
 
-**Status:** APPROVED RC by owner/HITL (2026-09-20) — evidence in `docs/release-evidence.md`; worker recommendation was BLOCK, owner overrode with accepted exceptions: (1) SRC-005 P0 primary CLI unresolved (no bin/argv; follow-up required before claiming CLI delivery), (2) GATE-05 freeze still draft (retro-approval pending — RESOLVED 2026-09-23: `docs/decisions/runtime-contract-freeze.md` v1.1 APPROVED, packet 1A+2A+3A+4A), (3) `docs/ac-coverage.md` 'No gaps' line overstates AC-003/SRC-005 — RESOLVED 2026-09-23: footer now reads "No gaps beyond explicitly approved exceptions (AC-003)" via `renderAcCoverage`; regenerated doc; typecheck 0, lint 0, test 284/284, (4) Phase 5-7 files uncommitted — RESOLVED 2026-09-23: committed (9be4d4e GATE-05 packet + this AC-003 wording fix), working tree clean.
+**Status:** APPROVED RC by owner/HITL (2026-09-20), with accepted exceptions recorded in `docs/release-evidence.md`. Follow-up evidence (2026-09-23) supersedes the relevant exception findings, but is not a new RC decision: (1) CLI exception has scoped implementation and subprocess evidence per approved CLI plan; remaining runtime module commands remain out of scope, (2) GATE-05 approval and (3) AC-003 namespace evidence are recorded in the release evidence and generated coverage report. The 2026-09-20 commit/clean-tree note is historical; this feature worktree has uncommitted changes, and no commit/release cut was requested. Latest verification: `npm test` 288/288 across 51 suites, `npm run typecheck`, `npm run lint`, `npm pack --dry-run` pass. This does not re-approve RC.
 
 ---
 

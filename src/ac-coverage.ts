@@ -24,8 +24,7 @@ function e(id: string, srcs: string[], evidence: string[], blocked?: string): Ac
 export const AC_COVERAGE: AcEntry[] = [
   e("AC-001", ["SRC-003", "SRC-046"], ["test/init.test.ts", "test/scenarios/minimal.test.ts"]),
   e("AC-002", ["SRC-046", "SRC-041"], ["test/init.test.ts", "test/scenarios/legacy.test.ts"]),
-  e("AC-003", ["SRC-004", "SRC-005"], ["package.json", "src/index.ts", "test/init.test.ts"],
-    "SRC-005 CLI half unevidenced: no executable CLI exists (no bin entry, src/index.ts is a placeholder). Evidence covers the init/SRC-004 half only. Accepted exception per L3-060 RC approval 2026-09-20; see docs/release-evidence.md."),
+  e("AC-003", ["SRC-004", "SRC-005"], ["package.json", "test/scenarios/cli.test.ts", "test/scenarios/packaging.test.ts", "test/init.test.ts"]),
   e("AC-004", ["SRC-009", "SRC-010"], ["test/manifests.test.ts", "test/drift.test.ts"]),
   e("AC-005", ["SRC-009", "SRC-010"], ["test/drift.test.ts", "test/manifests.test.ts"]),
   e("AC-006", ["SRC-010", "SRC-019"], ["test/transitions.test.ts", "test/artifacts.test.ts"]),

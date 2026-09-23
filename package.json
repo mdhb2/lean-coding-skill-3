@@ -4,6 +4,7 @@
   "private": true,
   "description": "LCS3 deterministic agentic coding runtime",
   "type": "module",
+  "bin": { "lcs3": "./dist/src/cli.js" },
   "files": ["dist/", "skills/", "docs/", "README.md", "README.id.md"],
   "engines": {
     "node": ">=22"

@@ -51,14 +51,14 @@ describe("L3-057 acceptance coverage sweep", () => {
     assert.ok(first.includes("No gaps"));
   });
 
-  it("AC-003 carries the explicit SRC-005 CLI-gap exception (no silent un-blocking)", () => {
+  it("AC-003 verifies namespace isolation and primary CLI entry point", () => {
     const row = AC_COVERAGE.find((a) => a.id === "AC-003");
-    assert.ok(row?.blocked && row.blocked.trim() !== "", "AC-003 must stay explicitly blocked");
-    assert.match(row.blocked, /no executable CLI exists/);
-    assert.match(row.blocked, /L3-060/);
+    assert.deepEqual(row?.srcs, ["SRC-004", "SRC-005"]);
+    assert.deepEqual(row?.evidence, ["package.json", "test/scenarios/cli.test.ts", "test/scenarios/packaging.test.ts", "test/init.test.ts"]);
+    assert.equal(row?.blocked, undefined);
     const r = checkAcCoverage(repoRoot());
-    assert.deepEqual(r.blocked.map((b) => b.id), ["AC-003"]);
-    assert.ok(renderAcCoverage(repoRoot(), r).includes("| AC-003 | SRC-004, SRC-005 | BLOCKED:"));
+    assert.deepEqual(r.blocked, []);
+    assert.ok(renderAcCoverage(repoRoot(), r).includes("| AC-003 | SRC-004, SRC-005 | package.json, test/scenarios/cli.test.ts"));
   });
 
   it("derived task coverage regenerates from canonical task frontmatter (AC-010)", () => {
